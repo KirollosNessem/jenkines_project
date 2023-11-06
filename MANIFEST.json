@@ -1,0 +1,39 @@
+{
+    "name": "msname-fs",
+    "type": "Microservice",
+    "microservice": {
+        "type": "Functional",
+        "API": {
+            "provided": [
+                {
+                    "type": "TMF",
+                    "code": "TMF_CODE",
+                    "name": "MICROSERVICE_NAME",
+                    "version": "TMF_VERSION"
+                }
+            ],
+            "consumed": [
+                {
+                    "type": "TMF_CONSUMED_TYPE",
+                    "code": "005",
+                    "name": "TMF_CONSUMED_NAME"
+                }
+            ]
+        },
+        "channels": []
+    },
+    "productOwner": {
+        "name": "Isaac Bello",
+        "email": "isaac.bello@vodafone.com"
+    },
+    "team": {
+        "name": "VF-IE Digital Engineering",
+        "email": "noman.sanaullah1@vodafone.com"
+    },
+    "dependencies": {
+        "microservices": [],
+        "CPS": [],
+        "third-party": []
+    },
+    "documentation": ""
+}
