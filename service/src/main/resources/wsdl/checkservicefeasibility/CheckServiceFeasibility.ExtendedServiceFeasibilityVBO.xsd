@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(c) Vodafone Group Services Limited. All rights reserved. This document 
+	comprises proprietary and confidential information and copyright material 
+	belonging to Vodafone Group Services Limited. Other than as permitted by 
+	law, no part of this document may be reproduced, adapted, or distributed, 
+	in any form or by any means, without the prior written consent of Vodafone 
+	Group Services Limited. The information in this document is subject to change 
+	without notice. All trademarks acknowledged. Vodafone Group Services Limited 
+	- Confidential -->
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tns="http://group.vodafone.com/schema/extension/vbo/service/service-feasibility/v1"
+	xmlns:cct="urn:un:unece:uncefact:documentation:standard:CoreComponentType:2"
+	targetNamespace="http://group.vodafone.com/schema/extension/vbo/service/service-feasibility/v1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	version="1.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			<p>Schema Definition for ServiceFeasibility Extension</p>
+		</xsd:documentation>
+	</xsd:annotation>
+	<xsd:import
+		namespace="urn:un:unece:uncefact:documentation:standard:CoreComponentType:2"
+		schemaLocation="CheckServiceFeasibility.CoreComponentType_2p0.xsd" />
+	<xsd:complexType name="ExtendedServiceFeasibilityVBOType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityDetailsType" />
+	<xsd:complexType name="ExtendedRelatedServiceFeasibilityType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityRolesType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityPartsType" />
+	<xsd:complexType name="ExtendedSalesOpportunityType" />
+	<xsd:complexType name="ExtendedSalesQuoteType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityCostType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityNoteType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityAttachmentType" />
+	<xsd:complexType name="ExtendedServiceFeasibilitySpecificationType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityStatusHistoryType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityLocationType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityRequestorType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityLineItemType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityLineItemSpecificationType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityLineItemScoreType" />
+	<xsd:complexType name="ExtendedServiceFeasibilityLineItemReasonType" />	
+	<xsd:complexType name="ExtendedServiceSpecType" />
+	<xsd:complexType name="ExtendedServiceSpecSpecificationType" />
+</xsd:schema>

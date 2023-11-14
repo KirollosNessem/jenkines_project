@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(c) Vodafone Group Services Limited. All rights reserved.
+This document comprises proprietary and confidential information and copyright material belonging to Vodafone Group Services Limited.
+Other than as permitted by law, no part of this document may be reproduced, adapted, or distributed, in any form or by any means, without
+the prior written consent of Vodafone Group Services Limited.
+The information in this document is subject to change without notice.
+All trademarks acknowledged.
+Vodafone Group Services Limited - Confidential-->
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tns="http://group.vodafone.com/schema/vbm/service/service-feasibility/v1"
+	xmlns:vbo="http://group.vodafone.com/schema/vbo/service/service-feasibility/v1"
+	targetNamespace="http://group.vodafone.com/schema/vbm/service/service-feasibility/v1"
+	xmlns:cmn="http://group.vodafone.com/schema/common/v1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	version="1.0">
+	<xsd:annotation>
+		<xsd:documentation>
+			<p>Vodafone Business Message Schema Definition for ServiceFeasibility</p>
+		</xsd:documentation>
+	</xsd:annotation>
+	<!-- ===================== Imports ============================ -->
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/vbo/service/service-feasibility/v1"
+		schemaLocation="CheckServiceFeasibility.ServiceFeasibilityVBO.xsd" />
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/common/v1"
+		schemaLocation="CheckServiceFeasibility.CodeLists.xsd" />
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/common/v1"
+		schemaLocation="CheckServiceFeasibility.Meta.xsd" />
+
+	<xsd:complexType name="GetServiceFeasibilityListVBMRequestType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the GetServiceFeasibilityList request payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:QueryType" />
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:element
+		name="GetServiceFeasibilityListVBMRequest"
+		type="tns:GetServiceFeasibilityListVBMRequestType" />
+	<xsd:complexType name="GetServiceFeasibilityListVBMResponseType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the GetServiceFeasibilityList response payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType"
+				minOccurs="0"
+				maxOccurs="unbounded" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element
+		name="GetServiceFeasibilityListVBMResponse"
+		type="tns:GetServiceFeasibilityListVBMResponseType" />
+
+	<xsd:complexType name="CheckServiceFeasibilityVBMRequestType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the CheckServiceFeasibilityList request payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element
+		name="CheckServiceFeasibilityVBMRequest"
+		type="tns:CheckServiceFeasibilityVBMRequestType" />
+
+	<xsd:complexType name="CheckServiceFeasibilityVBMResponseType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the CheckServiceFeasibility response payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType"/>
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element
+		name="CheckServiceFeasibilityVBMResponse"
+		type="tns:CheckServiceFeasibilityVBMResponseType" />
+
+
+	<xsd:element
+		name="NotifyServiceFeasibilityVBMRequest"
+		type="tns:NotifyServiceFeasibilityVBMRequestType" />
+
+	<xsd:complexType name="NotifyServiceFeasibilityVBMRequestType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the NotifyServiceFeasibility request payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType" />
+		</xsd:sequence>
+		<xsd:attribute
+			name="eventCode"
+			type="cmn:EventCodeType"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation>A value representing the event that occurred on the publishing system to generate this notify event.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute
+			name="businessEventCode"
+			type="xsd:token"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation>A value representing the business event that occurred on the publishing system to generate this notify event.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+	
+	<xsd:complexType name="SyncServiceFeasibilityVBMRequestType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the SyncServiceFeasibility request payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType" />
+		</xsd:sequence>
+		<xsd:attribute
+			name="eventCode"
+			type="cmn:EventCodeType" >
+			<xsd:annotation>
+				<xsd:documentation>A value representing the event that occurred on the publishing system to generate this notify event.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+		<xsd:attribute
+			name="businessEventCode"
+			type="xsd:token"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation>A value representing the business event that occurred on the publishing system to generate this notify event.</xsd:documentation>
+			</xsd:annotation>	
+		</xsd:attribute>			
+	</xsd:complexType>
+
+	<xsd:element
+		name="SyncServiceFeasibilityVBMRequest"
+		type="tns:SyncServiceFeasibilityVBMRequestType" />
+
+	<xsd:complexType name="SyncServiceFeasibilityVBMResponseType">
+		<xsd:annotation>
+			<xsd:documentation> Type definition for the SyncServiceFeasibility response payload.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ServiceFeasibilityVBO"
+				type="vbo:ServiceFeasibilityVBOType" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:element
+		name="SyncServiceFeasibilityVBMResponse"
+		type="tns:SyncServiceFeasibilityVBMResponseType" />
+	
+</xsd:schema>
