@@ -15,8 +15,6 @@ public class LineItemResponse {
     private String addressId;
     private String orderId;
     private String valid;
-    //TODO
-//    private String status.failed;
     private List<LineItemCategory> category;
     private SpecificationResponse specification;
     private List<ServiceSpecification> serviceSpecification;

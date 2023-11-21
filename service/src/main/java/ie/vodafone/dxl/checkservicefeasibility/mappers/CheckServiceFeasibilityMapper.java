@@ -16,6 +16,7 @@ import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasi
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceSpecType;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceFeasibilityRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceFeasibilityResponse;
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.Category;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemCategory;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemRequest;
@@ -53,14 +54,17 @@ public class CheckServiceFeasibilityMapper {
         return serviceFeasibilityRequest;
     }
 
-    public static CheckServiceFeasibilityResponse mapCheckServiceFeasibilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType) {
-        //TODO How will map failures
+    public static CheckServiceFeasibilityResponse mapCheckServiceFeasibilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType, ResultStatus resultStatus) {
         CheckServiceFeasibilityResponse response = new CheckServiceFeasibilityResponse();
+        if (resultStatus != null && StringUtils.isNotBlank(resultStatus.getName())) {
+            response.setName(resultStatus.getName());
+        }
         if (serviceFeasibilityVBOType == null) {
             return response;
         }
-        if (serviceFeasibilityVBOType.getType() != null && Constants.CheckServiceFeasibilityResponse.QA.equalsIgnoreCase(serviceFeasibilityVBOType.getType().getName())) {
-            response.setQa(serviceFeasibilityVBOType.getType().getValue());
+        response.setDesc(WSUtils.getValueFromTextType(serviceFeasibilityVBOType.getDesc()));
+        if (serviceFeasibilityVBOType.getType() != null) {
+            mapResponseType(serviceFeasibilityVBOType, response);
         }
         if (serviceFeasibilityVBOType.getCategories() != null) {
             mapServiceFeasibilityCategories(response, serviceFeasibilityVBOType.getCategories().getCategory());
@@ -74,9 +78,16 @@ public class CheckServiceFeasibilityMapper {
         if (serviceFeasibilityVBOType.getIDs() != null) {
             mapServiceFeasibilityResponseIDs(response, serviceFeasibilityVBOType.getIDs().getID());
         }
-
-
         return response;
+    }
+
+    private static void mapResponseType(ServiceFeasibilityVBOType serviceFeasibilityVBOType, CheckServiceFeasibilityResponse response) {
+        String name = serviceFeasibilityVBOType.getType().getName();
+        if (Constants.CheckServiceFeasibilityResponse.QA.equalsIgnoreCase(name)) {
+            response.setQa(serviceFeasibilityVBOType.getType().getValue());
+        } else if (Constants.CheckServiceFeasibilityResponse.ELIGIBILITY_CHECK.equalsIgnoreCase(name)) {
+            response.setEligibilityCheck(serviceFeasibilityVBOType.getType().getValue());
+        }
     }
 
     private static void mapServiceFeasibilityResponseIDs(CheckServiceFeasibilityResponse response, List<IDType> idTypeList) {
@@ -89,7 +100,6 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.CheckServiceFeasibilityResponse.LEORDER_ID.equalsIgnoreCase(idType.getSchemeName())) {
                 response.setLeOrderId(idType.getValue());
             }
-
         }
     }
 
@@ -145,20 +155,24 @@ public class CheckServiceFeasibilityMapper {
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
                 }
-                if (serviceSpecType.getSpecification() != null) {
-                    SubSpecification specification = new SubSpecification();
-                    mapServiceSubSpecificationIDs(specification, serviceSpecType.getSpecification().getIDs());
-                    mapServiceSpecificationCategories(specification, serviceSpecType.getSpecification().getCategories());
-                    mapServiceSpecificationCharacteristics(specification, serviceSpecType.getSpecification().getCharacteristicsValue());
-                    mappedServiceSpecification.setSpecification(specification);
-
-                }
+                mapServiceSpecifications(serviceSpecType, mappedServiceSpecification);
                 if (serviceSpecType.getIDs() != null) {
                     mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
                 }
             }
         }
         lineItemResponse.setServiceSpecification(mappedServiceSpecificationList);
+    }
+
+    private static void mapServiceSpecifications(ServiceSpecType serviceSpecType, ServiceSpecification mappedServiceSpecification) {
+        if (serviceSpecType.getSpecification() == null) {
+            return;
+        }
+        SubSpecification specification = new SubSpecification();
+        mapServiceSubSpecificationIDs(specification, serviceSpecType.getSpecification().getIDs());
+        mapServiceSpecificationCategories(specification, serviceSpecType.getSpecification().getCategories());
+        mapServiceSpecificationCharacteristics(specification, serviceSpecType.getSpecification().getCharacteristicsValue());
+        mappedServiceSpecification.setSpecification(specification);
     }
 
     private static void mapServiceSpecificationIDs(ServiceSpecification mappedServiceSpecification, List<IDType> idTypeList) {
@@ -233,7 +247,10 @@ public class CheckServiceFeasibilityMapper {
             LineItemCategory mappedCategory = new LineItemCategory();
             if (Constants.CheckServiceFeasibilityResponse.ACTION_FLAG.equalsIgnoreCase(category.getName())) {
                 mappedCategory.setActionFlag(category.getValue());
+            } else if (Constants.CheckServiceFeasibilityResponse.ELIGIBILITY_STATUS.equalsIgnoreCase(category.getName())) {
+                mappedCategory.setEligibilityStatus(category.getValue());
             }
+            mappedCategories.add(mappedCategory);
         }
         response.setCategory(mappedCategories);
     }
@@ -276,6 +293,12 @@ public class CheckServiceFeasibilityMapper {
                 specification.setAdditionalBuildIndicator(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.LineItemResponseSpecificationCharacteristic.DOES_PENDING_ORDER_EXIST.equalsIgnoreCase(characteristicName)) {
                 specification.setDoesPendingOrderExist(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.FEASIBILITY_CHECK.equalsIgnoreCase(characteristicName)) {
+                specification.setFeasibilityCheck(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.OPEN_ORDER_EXISTS.equalsIgnoreCase(characteristicName)) {
+                specification.setOpenOrderExists(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.ACTIVE_ASSET_EXISTS.equalsIgnoreCase(characteristicName)) {
+                specification.setActiveAssetExists(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
             } else if (Constants.LineItemResponseSpecificationCharacteristic.BROADBAND_SERVICE.equalsIgnoreCase(characteristicName)) {
                 specification.setBroadBandService(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.LineItemResponseSpecificationCharacteristic.SERVICE_PROVIDER.equalsIgnoreCase(characteristicName)) {
@@ -286,12 +309,11 @@ public class CheckServiceFeasibilityMapper {
         }
     }
 
-    private static void mapCheckServiceFeasibilityDetails(CheckServiceFeasibilityResponse response, IndicatorType
-            manualIndicator) {
-        if (manualIndicator == null || manualIndicator.getIndicatorString() == null) {
+    private static void mapCheckServiceFeasibilityDetails(CheckServiceFeasibilityResponse response, IndicatorType manualIndicator) {
+        if (manualIndicator == null || manualIndicator.isIndicator() == null) {
             return;
         }
-        response.setIndicator(Boolean.parseBoolean(manualIndicator.getIndicatorString().getValue()));
+        response.setIndicator(manualIndicator.isIndicator());
     }
 
     private static void mapServiceFeasibilityCategories(CheckServiceFeasibilityResponse
@@ -343,26 +365,29 @@ public class CheckServiceFeasibilityMapper {
             return;
         }
         ServiceFeasibilityLineItemSpecificationType specificationType = new ServiceFeasibilityLineItemSpecificationType();
+        specificationType.setType(WSUtils.createCodeType(specificationRequest.getType()));
         List<SpecificationType.CharacteristicsValue> characteristicsValue = specificationType.getCharacteristicsValue();
         characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getNewNetworkTechnology(), Constants.CheckServiceFeasibilityRequest.NEW_NETWORK_TECHNOLOGY));
-        characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getNewNetworkTechnology(), Constants.CheckServiceFeasibilityRequest.OLD_NETWORK_TECHNOLOGY));
-        characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getNewNetworkTechnology(), Constants.CheckServiceFeasibilityRequest.SERVICE_PROVIDER));
+        characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getOldNetworkTechnology(), Constants.CheckServiceFeasibilityRequest.OLD_NETWORK_TECHNOLOGY));
+        characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getServiceProvider(), Constants.CheckServiceFeasibilityRequest.SERVICE_PROVIDER));
+        characteristicsValue.add(WSUtils.createSpecificationCharacteristic(specificationRequest.getTransferRequest(), Constants.CheckServiceFeasibilityRequest.TRANSFER_REQUEST));
         serviceFeasibilityLineItemType.setSpecification(specificationType);
-
-
     }
 
     private static void mapLocationIDs(CheckServiceFeasibilityRequest request, ServiceFeasibilityPartsType parts) {
+        if (request.getLocation() == null) {
+            return;
+        }
         ServiceFeasibilityLocationType location = new ServiceFeasibilityLocationType();
         PostalAddressWithLocationType.IDs locationIDs = new PostalAddressWithLocationType.IDs();
-        WSUtils.addIdIfExists(locationIDs, request.getLocation().getPremisseId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
+        WSUtils.addIdIfExists(locationIDs, request.getLocation().getPremisesId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
         WSUtils.addIdIfExists(locationIDs, request.getLocation().getArdkey(), Constants.CheckServiceFeasibilityRequest.ARD_KEY);
+        WSUtils.addIdIfExists(locationIDs, request.getLocation().getVmLocationId(), Constants.CheckServiceFeasibilityRequest.VM_LOCATION_ID);
         location.setIDs(locationIDs);
         parts.setLocation(location);
     }
 
-    private static void mapRolesIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest
-            request) {
+    private static void mapRolesIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest request) {
         ServiceFeasibilityRolesType rolesType = new ServiceFeasibilityRolesType();
         ServiceFeasibilityRequestorType requestor = new ServiceFeasibilityRequestorType();
         InfoComponentType.IDs requestorIDs = new InfoComponentType.IDs();

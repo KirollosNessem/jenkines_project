@@ -1,6 +1,7 @@
 package ie.vodafone.dxl.checkservicefeasibility.mappers;
 
 import com.vodafone.group.schema.common.v1.BaseComponentType;
+import com.vodafone.group.schema.common.v1.GeographicLocationType;
 import com.vodafone.group.schema.common.v1.PostalAddressWithLocationType;
 import com.vodafone.group.schema.common.v1.SpecificationType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMRequestType;
@@ -12,6 +13,7 @@ import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceSpecS
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceSpecType;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceAbilityRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceAbilityResponse;
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LineItem;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Location;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Address;
@@ -27,6 +29,7 @@ import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Eligibil
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LineItemResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LineItemServiceSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LineItemSpecification;
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LocationBuildingDetails;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Specification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Survey;
 import ie.vodafone.dxl.checkservicefeasibility.utils.Constants;
@@ -56,14 +59,20 @@ public class CheckServiceAbilityMapper {
         return serviceFeasibilityRequest;
     }
 
-    public static CheckServiceAbilityResponse mapCheckServiceAbilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType) {
-        //TODO result status map!
-        //TODO result /ServiceFeasibilityVBO/Parts/LineItems/LineItem/Status=Failed map!
-
+    public static CheckServiceAbilityResponse mapCheckServiceAbilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType, ResultStatus resultStatus) {
         CheckServiceAbilityResponse response = new CheckServiceAbilityResponse();
-        if (serviceFeasibilityVBOType != null && serviceFeasibilityVBOType.getParts() != null) {
+        if (resultStatus != null && StringUtils.isNotBlank(resultStatus.getName())) {
+            response.setName(resultStatus.getName());
+        }
+        if (serviceFeasibilityVBOType == null) {
+            return response;
+        }
+        if (serviceFeasibilityVBOType.getParts() != null) {
             ServiceFeasibilityPartsType serviceFeasibilityParts = serviceFeasibilityVBOType.getParts();
             mapResponseLineItems(response, serviceFeasibilityParts.getLineItems());
+        }
+        if (serviceFeasibilityVBOType.getIDs() != null) {
+            mapResponseIDs(response, serviceFeasibilityVBOType.getIDs().getID());
         }
         return response;
     }
@@ -104,9 +113,6 @@ public class CheckServiceAbilityMapper {
         if (lineItem.getServiceSpecifications() != null) {
             mapLineItemServiceSpecificationResponse(lineItemResponse, lineItem.getServiceSpecifications().getServiceSpecification());
         }
-        if (lineItem.getIDs() != null) {
-            mapLineItemResponseIDs(lineItemResponse, lineItem.getIDs().getID());
-        }
     }
 
     private static void mapBuildingDetails(ServiceFeasibilityLineItemType lineItem, LineItemResponse lineItemResponse) {
@@ -123,7 +129,20 @@ public class CheckServiceAbilityMapper {
         if (lineItem.getServiceSpecifications() != null) {
             mapBuildingDetailsServiceSpecifications(buildingDetails, lineItem.getServiceSpecifications().getServiceSpecification());
         }
+        if (lineItem.getLocation() != null) {
+            mapBuildingDetailsLocation(buildingDetails, lineItem.getLocation().getGeoLocation());
+        }
         lineItemResponse.setBuildingDetails(buildingDetails);
+    }
+
+    private static void mapBuildingDetailsLocation(BuildingDetails buildingDetails, GeographicLocationType geoLocation) {
+        if (geoLocation == null) {
+            return;
+        }
+        LocationBuildingDetails location = new LocationBuildingDetails();
+        location.setLatitude(WSUtils.getValueFromMeasureType(geoLocation.getLatitudeMeasure()));
+        location.setLongitude(WSUtils.getValueFromMeasureType(geoLocation.getLongitudeMeasure()));
+        buildingDetails.setLocation(location);
     }
 
     private static void mapEligibilityDetailsSpecification(EligibilityDetails eligibilityDetails, List<ServiceSpecType> serviceSpecification) {
@@ -134,6 +153,7 @@ public class CheckServiceAbilityMapper {
         for (ServiceSpecType serviceSpecType : serviceSpecification) {
             EligibilityDetailsServiceSpecification eligibilityDetailsServiceSpecification = new EligibilityDetailsServiceSpecification();
             ServiceSpecSpecificationType specification = serviceSpecType.getSpecification();
+            eligibilityDetailsServiceSpecification.setDescription(WSUtils.getValueFromTextType(serviceSpecType.getDesc()));
             if (specification != null) {
                 mapEligibilityDetailsCharacteristics(eligibilityDetailsServiceSpecification, specification.getCharacteristicsValue());
             }
@@ -162,7 +182,7 @@ public class CheckServiceAbilityMapper {
             } else if (Constants.EligibilityDetails.PRE_ORDER_FLAG.equalsIgnoreCase(characteristicName)) {
                 eligibilityDetailsSpecification.setPreOrderFlag(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
             } else if (Constants.EligibilityDetails.WAY_LEAVE_REQUIRED.equalsIgnoreCase(characteristicName)) {
-                eligibilityDetailsSpecification.setWayLeaveRequired(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
+                eligibilityDetailsSpecification.setWayLeaveRequired(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.EligibilityDetails.CONNECTION_STANDARD.equalsIgnoreCase(characteristicName)) {
                 eligibilityDetailsSpecification.setConnectionStandard(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.EligibilityDetails.DROP_TYPE.equalsIgnoreCase(characteristicName)) {
@@ -170,11 +190,17 @@ public class CheckServiceAbilityMapper {
             } else if (Constants.EligibilityDetails.READY_FOR_SERVICE_DATE.equalsIgnoreCase(characteristicName)) {
                 eligibilityDetailsSpecification.setReadyForServiceDate(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.EligibilityDetails.ELIGIBLE_PRODUCTS.equalsIgnoreCase(characteristicName)) {
-                eligibilityDetailsSpecification.setEligibleProducts(WSUtils.getValueFromTextType(value.getValue()));
+                if (CollectionUtils.isEmpty(eligibilityDetailsSpecification.getEligibleProducts())) {
+                    eligibilityDetailsSpecification.setEligibleProducts(new ArrayList<>());
+                }
+                eligibilityDetailsSpecification.getEligibleProducts().add(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.EligibilityDetails.IN_HOME_SERVICES.equalsIgnoreCase(characteristicName)) {
-                eligibilityDetailsSpecification.setInHomeServices(WSUtils.getValueFromTextType(value.getValue()));
+                if (CollectionUtils.isEmpty(eligibilityDetailsSpecification.getInHomeServices())) {
+                    eligibilityDetailsSpecification.setInHomeServices(new ArrayList<>());
+                }
+                eligibilityDetailsSpecification.getInHomeServices().add(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.EligibilityDetails.CPE.equalsIgnoreCase(characteristicName)) {
-                eligibilityDetailsSpecification.setCPE(WSUtils.getValueFromTextType(value.getValue()));
+                eligibilityDetailsSpecification.setCpe(WSUtils.getValueFromTextType(value.getValue()));
             }
         }
         eligibilityDetailsServiceSpecification.setSpecification(eligibilityDetailsSpecification);
@@ -281,6 +307,8 @@ public class CheckServiceAbilityMapper {
                 specification.setMultiplePremises(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
             } else if (Constants.BuildingDetails.SURVEY_REQUIRED.equalsIgnoreCase(value.getCharacteristicName())) {
                 specification.setSurveyRequired(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
+            } else if (Constants.BuildingDetails.INTERVENTION_AREA.equalsIgnoreCase(value.getCharacteristicName())) {
+                specification.setInterventionArea(Boolean.parseBoolean(WSUtils.getValueFromTextType(value.getValue())));
             }
         }
         buildingDetails.setSpecification(specification);
@@ -313,13 +341,13 @@ public class CheckServiceAbilityMapper {
         });
     }
 
-    private static void mapLineItemResponseIDs(LineItemResponse lineItemResponse, List<IDType> ids) {
+    private static void mapResponseIDs(CheckServiceAbilityResponse response, List<IDType> ids) {
         if (CollectionUtils.isEmpty(ids)) {
             return;
         }
         ids.forEach(id -> {
             if (Constants.CheckServiceAbilityResponse.ORDER_ID.equals(id.getSchemeName())) {
-                lineItemResponse.setOrderId(WSUtils.getValueFromIDType(id));
+                response.setOrderId(WSUtils.getValueFromIDType(id));
             }
         });
     }
@@ -360,8 +388,7 @@ public class CheckServiceAbilityMapper {
         }
     }
 
-    private static void mapLineItemSpecificationCharacteristics(LineItemResponse
-                                                                        lineItemResponse, List<SpecificationType.CharacteristicsValue> characteristicsValue) {
+    private static void mapLineItemSpecificationCharacteristics(LineItemResponse lineItemResponse, List<SpecificationType.CharacteristicsValue> characteristicsValue) {
         if (CollectionUtils.isEmpty(characteristicsValue)) {
             return;
         }
@@ -408,11 +435,10 @@ public class CheckServiceAbilityMapper {
         }
         ServiceFeasibilityLocationType serviceFeasibilityLocation = new ServiceFeasibilityLocationType();
         PostalAddressWithLocationType.IDs iDs = new PostalAddressWithLocationType.IDs();
-        List<IDType> id = iDs.getID();
-        id.add(WSUtils.createID(location.getVmLocationId(), Constants.CheckServiceAbilityRequest.VM_LOCATION_ID));
-        id.add(WSUtils.createID(location.getArdkey(), Constants.CheckServiceAbilityRequest.ARD_KEY));
-        id.add(WSUtils.createID(location.getPremissedId(), Constants.CheckServiceAbilityRequest.PREMISES_ID));
-        id.add(WSUtils.createID(location.getNbiEircode(), Constants.CheckServiceAbilityRequest.NBI_EIRCODE));
+        WSUtils.addIdIfExists(iDs, location.getVmLocationId(), Constants.CheckServiceAbilityRequest.VM_LOCATION_ID);
+        WSUtils.addIdIfExists(iDs, location.getArdkey(), Constants.CheckServiceFeasibilityRequest.ARD_KEY);
+        WSUtils.addIdIfExists(iDs, location.getPremissedId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
+        WSUtils.addIdIfExists(iDs, location.getNbiEircode(), Constants.CheckServiceAbilityRequest.NBI_EIRCODE);
         serviceFeasibilityLocation.setIDs(iDs);
         parts.setLocation(serviceFeasibilityLocation);
     }
@@ -425,7 +451,6 @@ public class CheckServiceAbilityMapper {
         ServiceFeasibilityLineItemType.ServiceSpecifications serviceSpecifications = new ServiceFeasibilityLineItemType.ServiceSpecifications();
         for (Specification specification : item.getSpecification()) {
             ServiceSpecType serviceSpecType = new ServiceSpecType();
-            //TODO sample different from IDD in structure
             ServiceSpecSpecificationType value = new ServiceSpecSpecificationType();
             value.setType(WSUtils.createCodeType(specification.getType()));
             serviceSpecType.setSpecification(value);

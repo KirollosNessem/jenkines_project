@@ -8,4 +8,5 @@ public class SpecificationRequest {
     private String oldNetworkTechnology;
     private String newNetworkTechnology;
     private String serviceProvider;
+    private String transferRequest;
 }

@@ -2,6 +2,8 @@ package ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class EligibilityDetailsSpecification {
     private String poh;
@@ -10,13 +12,13 @@ public class EligibilityDetailsSpecification {
     private String preorderDate;
     private String installationType;
     private Boolean preOrderFlag;
-    private Boolean wayLeaveRequired;
+    private String wayLeaveRequired;
     private String connectionStandard;
     private String connectionComplexity;
     private String dropType;
     private String readyForServiceDate;
-    private String eligibleProducts;
-    private String inHomeServices;
-    private String CPE;
+    private List<String> eligibleProducts;
+    private List<String> inHomeServices;
+    private String cpe;
 
 }

@@ -10,9 +10,8 @@ import java.util.List;
 public class CheckServiceFeasibilityResponse {
     private List<Category> category;
     private List<LineItemResponse> lineItem;
-//    //TODO how to be mapped
-//    private List<Failure> failure;
     private Boolean indicator;
+    private String desc;
     private String eligibilityCheck;
     private String name;
     private String qaOrderId;

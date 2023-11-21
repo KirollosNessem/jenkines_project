@@ -1,9 +1,15 @@
 package ie.vodafone.dxl.checkservicefeasibility.soapclient;
 
+import com.vodafone.core.exception.DXLException;
 import com.vodafone.group.contract.vfo.fault.v1.FaultType;
 import com.vodafone.group.schema.common.v1.FaultCategoryCodeType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMRequestType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMResponseType;
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
+import ie.vodafone.dxl.checkservicefeasibility.utils.Constants;
+import ie.vodafone.dxl.checkservicefeasibility.utils.ErrorMessageEnum;
+import ie.vodafone.dxl.checkservicefeasibility.utils.SoapUtils;
+import ie.vodafone.dxl.utils.common.CollectionUtils;
 import ie.vodafone.dxl.utils.exceptions.ExceptionUtil;
 import ie.vodafone.dxl.utils.exceptions.constant.ExceptionConstants;
 import ie.vodafone.dxl.utils.exceptions.model.DxlCsmException;
@@ -24,6 +30,9 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.xml.bind.JAXBException;
+import javax.xml.ws.BindingProvider;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -31,10 +40,13 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
 import java.util.function.Function;
 
+import static ie.vodafone.dxl.checkservicefeasibility.utils.ExceptionUtil.buildDxlCsmException;
 import static ie.vodafone.dxl.checkservicefeasibility.utils.ExceptionUtil.checkTimeoutAndBuildTMFException;
+import static ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildTMFErrorWithCode;
 import static ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildTMFExceptionWithGenerics;
 import static ie.vodafone.dxl.utils.exceptions.constant.ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE;
 import static ie.vodafone.dxl.utils.exceptions.constant.ExceptionConstants.EMPTY_SOAP_BODY_IN_RESPONSE;
+import static ie.vodafone.dxl.utils.exceptions.constant.ExceptionConstants.GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS;
 import static ie.vodafone.dxl.utils.exceptions.constant.GenericErrorMessageEnum.CIRCUIT_BREAKER_IS_OPEN;
 import static ie.vodafone.dxl.utils.exceptions.constant.GenericErrorMessageEnum.EMPTY_SOAP_BODY;
 
@@ -64,20 +76,22 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
 
     /**
      * Overriding createPort by setting parameters
+     *
      * @return
      */
     @Override
     public CheckServiceFeasibilityInterface createClient(ConcurrentMap<String, Header> headersList) {
         setServiceClass(CheckServiceFeasibilityInterface.class);
         logger.info("Service class is set as {} to create soap client by external layer", CheckServiceFeasibilityInterface.class);
-
         try {
             setHeaders(ExtLayerUtil.createHeaders(actionFromProp, actionToProp));
         } catch (JAXBException e) {
             logger.error("Error creating client headers in soap request");
             throw ExceptionUtil.buildTMFError(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionConstants.GENERIC_MESSAGE_ERROR);
         }
-        return super.createClient(headersList);
+        Map<String, Object> clientProperties = new HashMap<>();
+        clientProperties.put(Constants.PROP_JAXB_VALIDATION_EVENT_HANDLER, Boolean.FALSE);
+        return super.createClient(headersList, clientProperties);
     }
 
     @Override
@@ -87,22 +101,27 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
     @Asynchronous
     public CompletionStage<Object> callService(Object request, ConcurrentMap<String, Header> concurrentMap) {
         CompletableFuture<Object> future = new CompletableFuture<>();
+        BindingProvider bindingProvider = (BindingProvider) soapClient;
         if (request.getClass() == CheckServiceFeasibilityVBMRequestType.class) {
             logger.info("Calling CheckServiceFeasibility soap operation ");
             CheckServiceFeasibilityVBMRequestType requestType = (CheckServiceFeasibilityVBMRequestType) request;
-            checkServiceFeasibilityAsync(future, requestType);
+            checkServiceFeasibilityAsync(future, requestType, bindingProvider);
         }
         return future;
     }
 
-    private void checkServiceFeasibilityAsync(CompletableFuture<Object> future, CheckServiceFeasibilityVBMRequestType requestType){
+    private void checkServiceFeasibilityAsync(CompletableFuture<Object> future, CheckServiceFeasibilityVBMRequestType requestType, BindingProvider bindingProvider) {
         soapClient.checkServiceFeasibilityAsync(requestType, asyncRes -> {
             try {
                 CheckServiceFeasibilityVBMResponseType responseType = asyncRes.get();
-                future.complete(responseType);
-            }
-            catch (InterruptedException | ExecutionException e){
-                if(e.getMessage().contains(EMPTY_SOAP_BODY_IN_RESPONSE)){
+                ResultStatus resultStatus = getResultStatus(bindingProvider);
+                CheckServiceFeasibilityOsbResponse osbResponse = new CheckServiceFeasibilityOsbResponse(responseType, resultStatus);
+                future.complete(osbResponse);
+            } catch (DXLException e) {
+                logger.error("OSB Failure - Failed to call getSubscription soap operation");
+                handleResultStatusErrors(future, e);
+            } catch (InterruptedException | ExecutionException e) {
+                if (e.getMessage().contains(EMPTY_SOAP_BODY_IN_RESPONSE)) {
                     logger.error("empty Soap body in checkServiceFeasibility");
                     future.completeExceptionally(buildTMFExceptionWithGenerics(HttpStatus.SC_NOT_FOUND, EMPTY_SOAP_BODY));
                 } else {
@@ -117,6 +136,24 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
         });
     }
 
+    private void handleResultStatusErrors(CompletableFuture<Object> future, DXLException exception) {
+        logger.error(exception.getMessage());
+        if (exception.getMessage().contains(Constants.ErrorMessages.MISSING_MANDATORY) || exception.getMessage().contains(Constants.ErrorMessages.PREMISES_ID_NOT_SPECIFIED)) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
+        } else if (exception.getMessage().contains(Constants.ErrorMessages.INVALID_UAN) ) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_UAN));
+        }
+        future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exception.getMessage(), ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
+    }
+
+    private ResultStatus getResultStatus(BindingProvider bindingProvider) throws DXLException {
+        ResultStatus resultStatus = SoapUtils.getResultStatusFromSoapHeader(bindingProvider);
+        if (resultStatus != null && CollectionUtils.isNotEmpty(resultStatus.getFailures())) {
+            throw new DXLException("OSB failed with " + resultStatus.getFailures());
+        }
+        return resultStatus;
+    }
+
     public static <T> boolean handleFault(CompletableFuture<?> future, Class<T> vodafoneFault, Function<T, FaultType> getFaultInfo, Exception e) {
         Optional<FaultType> faultType = Optional.ofNullable(e.getCause()).filter(vodafoneFault::isInstance).map(vodafoneFault::cast).map(getFaultInfo);
         if (faultType.isEmpty()) {
@@ -128,28 +165,21 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
                 .map(FaultCategoryCodeType::value)
                 .orElse(null);
 
-        String message = faultType
-                .map(FaultType::getName)
-                .orElse(null);
-
         if (BUSINESS.equalsIgnoreCase(category)) {
             future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, e.getCause().getMessage(), BUSINESS_CATEGORY_SOAP_FAULT_CODE));
         } else if (TECHNICAL.equalsIgnoreCase(category)) {
-//            if (ENTITY_NOT_FOUND.equalsIgnoreCase(message)) {
-//                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_NOT_FOUND, ErrorMessageEnum.ENTITY_NOT_FOUND));
-//            } else if (e.getMessage().contains(PREFERRED_USER_NOT_SET)) {
-//                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.PREFERRED_USER_NOT_SET));
-//            } else if (e.getMessage().contains(USER_ALREADY_EXISTS)) {
-//                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.USER_ALREADY_EXISTS));
-//            } else if (e.getMessage().contains(INVALID_CREATE_REQUEST)) {
-//                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_CREATE_REQUEST));
-//            } else {
-//                future.completeExceptionally(buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage(),GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
-//            }
+            String errorMessage = e.getMessage();
+            if (errorMessage.contains(Constants.ErrorMessages.CLIENT_UNMARSHALLING) || errorMessage.contains(Constants.ErrorMessages.INVALID_REQUEST) || errorMessage.contains(Constants.ErrorMessages.MISSING_OR_INVALID_VALUE)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
+            } else if (e.getMessage().contains(Constants.ErrorMessages.ORDER_ALREADY_EXIST)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.ORDER_ALREADY_EXIST));
+            } else {
+                future.completeExceptionally(buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage(), GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
+            }
         }
         return true;
     }
-    
+
     private CompletionStage<Object> callServiceFallback(Object request, ConcurrentMap<String, Header> customHeaders) {
         return CompletableFuture.failedFuture(buildTMFExceptionWithGenerics(HttpStatus.SC_SERVICE_UNAVAILABLE, CIRCUIT_BREAKER_IS_OPEN));
     }

@@ -18,12 +18,6 @@ public class ExceptionUtil {
         throw new IllegalStateException("Utility Class");
     }
 
-//    public static TMFException buildTMFExceptionWithEnum(int httpStatus, ErrorMessageEnum errorMessageEnum) {
-//        return buildTMFErrorWithCode(httpStatus,
-//                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getMessage).orElse(null),
-//                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getErrorCode).orElse(null));
-//    }
-
     public static TMFException checkTimeoutAndBuildTMFException(Throwable throwable){
         return Optional.ofNullable(throwable)
                 .map(Throwable::getCause)
@@ -32,9 +26,9 @@ public class ExceptionUtil {
                 .orElseGet(() -> buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, throwable.getMessage(), GENERIC_CSM_ERROR_CODE));
     }
 
-//    public static DxlCsmException buildDxlCsmException(int httpStatus, ErrorMessageEnum errorMessageEnum) {
-//        return ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(httpStatus,
-//                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getMessage).orElse(null),
-//                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getErrorCode).orElse(null));
-//    }
+    public static DxlCsmException buildDxlCsmException(int httpStatus, ErrorMessageEnum errorMessageEnum) {
+        return ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(httpStatus,
+                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getMessage).orElse(null),
+                Optional.ofNullable(errorMessageEnum).map(ErrorMessageEnum::getErrorCode).orElse(null));
+    }
 }

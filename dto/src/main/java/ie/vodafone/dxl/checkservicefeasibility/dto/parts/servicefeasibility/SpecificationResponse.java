@@ -6,6 +6,9 @@ import lombok.Data;
 public class SpecificationResponse {
     private Boolean portAvailableFlag;
     private Boolean doesPendingOrderExist;
+    private Boolean feasibilityCheck;
+    private Boolean openOrderExists;
+    private Boolean activeAssetExists;
     private String additionalBuildIndicator;
     private String type;
     private String broadBandService;

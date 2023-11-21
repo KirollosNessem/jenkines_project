@@ -20,14 +20,6 @@ public class CheckServiceAbilityRequest {
     private Location location;
     private String status;
 
-
-    //    public List<Identification> getIdentifications() {
-//        if (identifications == null) {
-//            identifications = new ArrayList<>();
-//        }
-//        return identifications;
-//    }
-//
     public boolean isEmpty() {
         return CollectionUtils.isEmpty(lineItem)
                 && (location == null || location.isEmpty())

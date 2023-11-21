@@ -11,5 +11,5 @@ public class BuildingDetails {
     private List<Category> category;
     private BuildingDetailsSpecification specification;
     private List<BuildingDetailsServiceSpecification> serviceSpecifications;
-    private List<LocationBuildingDetails> location;
+    private LocationBuildingDetails location;
 }

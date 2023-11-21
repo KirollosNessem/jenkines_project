@@ -6,5 +6,6 @@ import lombok.Data;
 public class BuildingDetailsSpecification {
     private Boolean multiplePremises;
     private Boolean surveyRequired;
+    private Boolean interventionArea;
 
 }
