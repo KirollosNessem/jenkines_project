@@ -151,8 +151,8 @@ public class WSUtils {
     }
 
     public static String getValidityPeriodToDate(ValidityPeriodType validityPeriodType) {
-        return validityPeriodType != null && validityPeriodType.getToDate() != null && validityPeriodType.getToDate().getDate() != null ?
-                validityPeriodType.getToDate().getDate().toString() : null;
+        return validityPeriodType != null && validityPeriodType.getToDate() != null && validityPeriodType.getToDate().getDateString() != null ?
+                validityPeriodType.getToDate().getDateString().getValue() : null;
     }
 
     public static String getValueFromTextType(TextType textType) {
@@ -259,7 +259,6 @@ public class WSUtils {
             if (iDs == null) {
                 iDs = new PostalAddressWithLocationType.IDs();
             }
-
             iDs.getID().add(WSUtils.createID(value, name));
         }
     }

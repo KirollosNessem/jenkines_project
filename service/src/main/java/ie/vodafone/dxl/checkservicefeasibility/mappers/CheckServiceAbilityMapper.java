@@ -5,6 +5,7 @@ import com.vodafone.group.schema.common.v1.GeographicLocationType;
 import com.vodafone.group.schema.common.v1.PostalAddressWithLocationType;
 import com.vodafone.group.schema.common.v1.SpecificationType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMRequestType;
+import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMResponseType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLineItemType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLocationType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityPartsType;
@@ -59,14 +60,15 @@ public class CheckServiceAbilityMapper {
         return serviceFeasibilityRequest;
     }
 
-    public static CheckServiceAbilityResponse mapCheckServiceAbilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType, ResultStatus resultStatus) {
+    public static CheckServiceAbilityResponse mapCheckServiceAbilityResponse(CheckServiceFeasibilityVBMResponseType serviceFeasibilityVBMResponseType, ResultStatus resultStatus) {
         CheckServiceAbilityResponse response = new CheckServiceAbilityResponse();
         if (resultStatus != null && StringUtils.isNotBlank(resultStatus.getName())) {
             response.setName(resultStatus.getName());
         }
-        if (serviceFeasibilityVBOType == null) {
+        if (serviceFeasibilityVBMResponseType == null || serviceFeasibilityVBMResponseType.getServiceFeasibilityVBO() == null) {
             return response;
         }
+        ServiceFeasibilityVBOType serviceFeasibilityVBOType = serviceFeasibilityVBMResponseType.getServiceFeasibilityVBO();
         if (serviceFeasibilityVBOType.getParts() != null) {
             ServiceFeasibilityPartsType serviceFeasibilityParts = serviceFeasibilityVBOType.getParts();
             mapResponseLineItems(response, serviceFeasibilityParts.getLineItems());

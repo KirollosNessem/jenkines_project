@@ -4,6 +4,7 @@ import com.vodafone.group.schema.common.v1.BaseComponentType;
 import com.vodafone.group.schema.common.v1.InfoComponentType;
 import com.vodafone.group.schema.common.v1.SpecificationType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMRequestType;
+import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMResponseType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLineItemSpecificationType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLineItemType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityPartsType;
@@ -45,14 +46,15 @@ public class QueryAncillaryServicesMapper {
         return serviceFeasibilityRequest;
     }
 
-    public static QueryAncillaryServicesResponse mapCheckServiceFeasibilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType, ResultStatus resultStatus) {
+    public static QueryAncillaryServicesResponse mapCheckServiceFeasibilityResponse(CheckServiceFeasibilityVBMResponseType serviceFeasibilityVBMResponseType, ResultStatus resultStatus) {
         QueryAncillaryServicesResponse response = new QueryAncillaryServicesResponse();
         if (resultStatus != null && StringUtils.isNotBlank(resultStatus.getName())) {
             response.setName(resultStatus.getName());
         }
-        if (serviceFeasibilityVBOType == null) {
+        if (serviceFeasibilityVBMResponseType == null || serviceFeasibilityVBMResponseType.getServiceFeasibilityVBO() == null) {
             return response;
         }
+        ServiceFeasibilityVBOType serviceFeasibilityVBOType = serviceFeasibilityVBMResponseType.getServiceFeasibilityVBO();
         if (serviceFeasibilityVBOType.getIDs() != null) {
             mapServiceFeasibilityVBOIDs(response, serviceFeasibilityVBOType.getIDs().getID());
         }

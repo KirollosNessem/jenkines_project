@@ -1,0 +1,20 @@
+{
+  "category": [
+    {
+      "systemsToCall": "EligibilityCheck"
+    }
+  ],
+  "lineItem": [
+    {
+      "status": "OK",
+      "category": [
+        {
+          "eligibilityStatus": "Passed"
+        }
+      ]
+    }
+  ],
+  "indicator": true,
+  "eligibilityCheck": "SIRO",
+  "name": "OK"
+}

@@ -57,6 +57,7 @@ import static ie.vodafone.dxl.utils.exceptions.constant.GenericErrorMessageEnum.
 public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<CheckServiceFeasibilityInterface> {
 
     private static final Logger logger = LoggerFactory.getLogger(CheckServiceFeasibilitySoapClient.class);
+
     private static final String BUSINESS = "BUSINESS";
     private static final String TECHNICAL = "TECHNICAL";
 

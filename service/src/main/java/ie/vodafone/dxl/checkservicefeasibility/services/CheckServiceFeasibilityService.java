@@ -29,7 +29,6 @@ public class CheckServiceFeasibilityService {
 
     private final CheckServiceFeasibilityCacheService checkServiceFeasibilityCacheService;
 
-
     @Inject
     public CheckServiceFeasibilityService(CheckServiceFeasibilitySoapClient soapClient, QueryAncillarysCacheService queryAncillarysCacheService, CheckServiceAbilityCacheService checkServiceAbilityCacheService, CheckServiceFeasibilityCacheService checkServiceFeasibilityCacheService) {
         this.soapClient = soapClient;
@@ -46,7 +45,7 @@ public class CheckServiceFeasibilityService {
                     .completionStage(soapClient.callService(serviceRequest, null))
                     .map(CheckServiceFeasibilityOsbResponse.class::cast);
 
-            return serviceResponse.map(response -> CheckServiceAbilityMapper.mapCheckServiceAbilityResponse(response.getOsbResponse().getServiceFeasibilityVBO(), response.getResultStatus()))
+            return serviceResponse.map(response -> CheckServiceAbilityMapper.mapCheckServiceAbilityResponse(response.getOsbResponse(), response.getResultStatus()))
                     .invoke(response -> checkServiceAbilityCacheService.saveCache(response, request));
         }
         return Uni.createFrom().item(mappedResponse);
@@ -61,7 +60,7 @@ public class CheckServiceFeasibilityService {
                     .completionStage(soapClient.callService(serviceRequest, null))
                     .map(CheckServiceFeasibilityOsbResponse.class::cast);
 
-            return serviceResponse.map(response -> CheckServiceFeasibilityMapper.mapCheckServiceFeasibilityResponse(response.getOsbResponse().getServiceFeasibilityVBO(), response.getResultStatus()))
+            return serviceResponse.map(response -> CheckServiceFeasibilityMapper.mapCheckServiceFeasibilityResponse(response.getOsbResponse(), response.getResultStatus()))
                     .invoke(response -> checkServiceFeasibilityCacheService.saveCache(response, request));
         }
         return Uni.createFrom().item(mappedResponse);
@@ -76,7 +75,7 @@ public class CheckServiceFeasibilityService {
                     .completionStage(soapClient.callService(serviceRequest, null))
                     .map(CheckServiceFeasibilityOsbResponse.class::cast);
 
-            return serviceResponse.map(response -> QueryAncillaryServicesMapper.mapCheckServiceFeasibilityResponse(response.getOsbResponse().getServiceFeasibilityVBO(), response.getResultStatus()))
+            return serviceResponse.map(response -> QueryAncillaryServicesMapper.mapCheckServiceFeasibilityResponse(response.getOsbResponse(), response.getResultStatus()))
                     .invoke(response -> queryAncillarysCacheService.saveCache(response, request));
         }
         return Uni.createFrom().item(mappedResponse);

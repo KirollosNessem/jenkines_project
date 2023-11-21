@@ -5,6 +5,7 @@ import com.vodafone.group.schema.common.v1.InfoComponentType;
 import com.vodafone.group.schema.common.v1.PostalAddressWithLocationType;
 import com.vodafone.group.schema.common.v1.SpecificationType;
 import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMRequestType;
+import com.vodafone.group.schema.vbm.service.service_feasibility.v1.CheckServiceFeasibilityVBMResponseType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.SalesQuoteReferenceType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLineItemSpecificationType;
 import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceFeasibilityLineItemType;
@@ -54,14 +55,15 @@ public class CheckServiceFeasibilityMapper {
         return serviceFeasibilityRequest;
     }
 
-    public static CheckServiceFeasibilityResponse mapCheckServiceFeasibilityResponse(ServiceFeasibilityVBOType serviceFeasibilityVBOType, ResultStatus resultStatus) {
+    public static CheckServiceFeasibilityResponse mapCheckServiceFeasibilityResponse(CheckServiceFeasibilityVBMResponseType feasibilityVBMResponseType, ResultStatus resultStatus) {
         CheckServiceFeasibilityResponse response = new CheckServiceFeasibilityResponse();
         if (resultStatus != null && StringUtils.isNotBlank(resultStatus.getName())) {
             response.setName(resultStatus.getName());
         }
-        if (serviceFeasibilityVBOType == null) {
+        if (feasibilityVBMResponseType == null || feasibilityVBMResponseType.getServiceFeasibilityVBO() == null) {
             return response;
         }
+        ServiceFeasibilityVBOType serviceFeasibilityVBOType = feasibilityVBMResponseType.getServiceFeasibilityVBO();
         response.setDesc(WSUtils.getValueFromTextType(serviceFeasibilityVBOType.getDesc()));
         if (serviceFeasibilityVBOType.getType() != null) {
             mapResponseType(serviceFeasibilityVBOType, response);
@@ -141,8 +143,6 @@ public class CheckServiceFeasibilityMapper {
         List<ServiceSpecification> mappedServiceSpecificationList = new ArrayList<>();
         for (ServiceSpecType serviceSpecType : specTypeList) {
             ServiceSpecification mappedServiceSpecification = new ServiceSpecification();
-            //TODO check what that mean
-//            /ServiceFeasibilityVBO/Parts/LineItems/LineItem/ServiceSpecifications/ServiceSpecification[Name='available']
             if (Constants.ServiceSpecificationResponse.ACTIVE.equalsIgnoreCase(WSUtils.getValueFromTextType(serviceSpecType.getName()))) {
                 mappedServiceSpecification.setActive(WSUtils.getValueFromTextType(serviceSpecType.getName()));
             } else if (Constants.ServiceSpecificationResponse.AVAILABLE.equalsIgnoreCase(WSUtils.getValueFromTextType(serviceSpecType.getName()))) {
@@ -151,7 +151,6 @@ public class CheckServiceFeasibilityMapper {
                 mappedServiceSpecification.setReserved(WSUtils.getValueFromTextType(serviceSpecType.getName()));
             }
             if (serviceSpecType.getType() != null) {
-                //TODO doublecheck that
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
                 }
@@ -316,8 +315,7 @@ public class CheckServiceFeasibilityMapper {
         response.setIndicator(manualIndicator.isIndicator());
     }
 
-    private static void mapServiceFeasibilityCategories(CheckServiceFeasibilityResponse
-                                                                response, List<BaseComponentType.Categories.Category> categories) {
+    private static void mapServiceFeasibilityCategories(CheckServiceFeasibilityResponse response, List<BaseComponentType.Categories.Category> categories) {
         if (CollectionUtils.isEmpty(categories)) {
             return;
         }
@@ -388,6 +386,9 @@ public class CheckServiceFeasibilityMapper {
     }
 
     private static void mapRolesIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest request) {
+        if (StringUtils.isBlank(request.getUan())) {
+            return;
+        }
         ServiceFeasibilityRolesType rolesType = new ServiceFeasibilityRolesType();
         ServiceFeasibilityRequestorType requestor = new ServiceFeasibilityRequestorType();
         InfoComponentType.IDs requestorIDs = new InfoComponentType.IDs();
@@ -406,6 +407,4 @@ public class CheckServiceFeasibilityMapper {
         salesQuote.setIDs(salesQuoteIDs);
         parts.setSalesQuote(salesQuote);
     }
-
-
 }

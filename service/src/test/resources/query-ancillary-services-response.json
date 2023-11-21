@@ -1,3 +1,21 @@
 {
-
+  "qaOrderId":"343327",
+  "specification": {
+    "tosFlag": "N"
+  },
+  "lineItem": [
+    {
+      "status": "C",
+      "cli": "35314534540",
+      "specification": {
+        "broadbandService": "FTC",
+        "type": "FTC"
+      },
+      "category": [
+        {
+          "actionFlag": "L"
+        }
+      ]
+    }
+  ]
 }
