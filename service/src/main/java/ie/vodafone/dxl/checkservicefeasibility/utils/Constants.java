@@ -17,6 +17,9 @@ public class Constants {
         public static final String CLIENT_UNMARSHALLING = "ClientUnmarshalling Error";
         public static final String MISSING_OR_INVALID_VALUE = "Missing or Invalid Value";
         public static final String INVALID_REQUEST = "request is an invalid usage of the operation";
+        public static final String INVALID_PRODUCT_TYPE= "Invalid ProductType parameter.";
+        public static final String INVALID_CONTENT= "Invalid content";
+        public static final String LOCATION_ID_IS_REQUIRED = "locationID is required";
         public static final String ORDER_ALREADY_EXIST = "Order No already present in the system";
         public static final String PREMISES_ID_NOT_SPECIFIED = "Premises Id not specified";
         public static final CharSequence MISSING_MANDATORY = "missing mandatory";

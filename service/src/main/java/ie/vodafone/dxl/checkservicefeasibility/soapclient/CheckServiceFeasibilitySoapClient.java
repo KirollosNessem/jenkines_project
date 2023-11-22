@@ -139,9 +139,12 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
 
     private void handleResultStatusErrors(CompletableFuture<Object> future, DXLException exception) {
         logger.error(exception.getMessage());
-        if (exception.getMessage().contains(Constants.ErrorMessages.MISSING_MANDATORY) || exception.getMessage().contains(Constants.ErrorMessages.PREMISES_ID_NOT_SPECIFIED)) {
+
+        if (exception.getMessage().contains(Constants.ErrorMessages.PREMISES_ID_NOT_SPECIFIED)) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.PREMISES_ID_NOT_SPECIFIED));
+        } else if (exception.getMessage().contains(Constants.ErrorMessages.MISSING_MANDATORY)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
-        } else if (exception.getMessage().contains(Constants.ErrorMessages.INVALID_UAN) ) {
+        } else if (exception.getMessage().contains(Constants.ErrorMessages.INVALID_UAN)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_UAN));
         }
         future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exception.getMessage(), ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
@@ -170,10 +173,18 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
             future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, e.getCause().getMessage(), BUSINESS_CATEGORY_SOAP_FAULT_CODE));
         } else if (TECHNICAL.equalsIgnoreCase(category)) {
             String errorMessage = e.getMessage();
-            if (errorMessage.contains(Constants.ErrorMessages.CLIENT_UNMARSHALLING) || errorMessage.contains(Constants.ErrorMessages.INVALID_REQUEST) || errorMessage.contains(Constants.ErrorMessages.MISSING_OR_INVALID_VALUE)) {
-                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
+            if (errorMessage.contains(Constants.ErrorMessages.INVALID_PRODUCT_TYPE)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_PRODUCT_TYPE));
+            } else if (errorMessage.contains(Constants.ErrorMessages.LOCATION_ID_IS_REQUIRED)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.LOCATION_ID_IS_REQUIRED));
             } else if (e.getMessage().contains(Constants.ErrorMessages.ORDER_ALREADY_EXIST)) {
                 future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_INTERNAL_SERVER_ERROR, ErrorMessageEnum.ORDER_ALREADY_EXIST));
+            } else if (errorMessage.contains(Constants.ErrorMessages.INVALID_CONTENT)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_CONTENT));
+            } else if (errorMessage.contains(Constants.ErrorMessages.MISSING_OR_INVALID_VALUE) || errorMessage.contains(Constants.ErrorMessages.INVALID_REQUEST)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
+            } else if (errorMessage.contains(Constants.ErrorMessages.CLIENT_UNMARSHALLING)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.GENERIC_CLIENT_UNMARSHALLING));
             } else {
                 future.completeExceptionally(buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage(), GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
             }
