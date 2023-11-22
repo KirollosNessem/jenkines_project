@@ -55,7 +55,6 @@ public class Constants {
         public static final String CLI = "CLI";
         public static final String QAORDER_ID = "QAOrderID";
         public static final String INSITU_FLAG = "INSITU_FLAG";
-        public static final String ACTION_FLAG1 = "ACTION_FLAG";
         public static final String TELE_NO = "TELE_NO";
 
     }

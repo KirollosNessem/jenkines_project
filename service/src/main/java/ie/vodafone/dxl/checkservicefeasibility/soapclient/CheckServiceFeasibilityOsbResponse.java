@@ -13,8 +13,4 @@ import lombok.NoArgsConstructor;
 public class CheckServiceFeasibilityOsbResponse {
     private CheckServiceFeasibilityVBMResponseType osbResponse;
     private ResultStatus resultStatus;
-
-    public CheckServiceFeasibilityOsbResponse(CheckServiceFeasibilityVBMResponseType osbResponse) {
-        this.osbResponse = osbResponse;
-    }
 }
