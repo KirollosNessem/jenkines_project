@@ -8,8 +8,7 @@ public enum ErrorMessageEnum {
     PREMISES_ID_NOT_SPECIFIED("CSF103", "V0023_Premises Id not specified"),
     LOCATION_ID_IS_REQUIRED("CSF104", "locationID is required"),
     INVALID_PRODUCT_TYPE("CSF105", "Invalid ProductType parameter"),
-    INVALID_CONTENT("CSF106", "Invalid content was found"),
-    GENERIC_CLIENT_UNMARSHALLING("CSF107", "Service Callout Failure soapenv:ClientUnmarshalling Error");
+    INVALID_CONTENT("CSF106", "Invalid content was found");
 
     private String errorCode;
     private String message;
