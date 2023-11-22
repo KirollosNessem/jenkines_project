@@ -30,6 +30,7 @@
         <gson.version>2.8.9</gson.version>
         <com.googlecode.aviator.version>5.3.3</com.googlecode.aviator.version>
         <com.hazelcast.version>5.2.4</com.hazelcast.version>
+        <ie.vodafone.dxl.util.common.version>1.0.9</ie.vodafone.dxl.util.common.version>
     </properties>
 
     <dependencyManagement>
