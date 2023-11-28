@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--(c) Vodafone Group Services Limited. All rights reserved.
+This document comprises proprietary and confidential information and copyright material belonging to Vodafone Group Services Limited.
+Other than as permitted by law, no part of this document may be reproduced, adapted, or distributed, in any form or by any means, without
+the prior written consent of Vodafone Group Services Limited.
+The information in this document is subject to change without notice.
+All trademarks acknowledged.
+Vodafone Group Services Limited - Confidential-->
+<wsdl:definitions
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:wsa="http://www.w3.org/2005/08/addressing"
+        xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+        xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+        xmlns:wssem="http://lsdis.cs.uga.edu/projects/meteor-s/wsdl-s/"
+        xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+        xmlns:vfo="http://group.vodafone.com/contract/vfo/fault/v1"
+        xmlns:vho="http://group.vodafone.com/contract/vho/header/v1"
+        xmlns:vbm="http://group.vodafone.com/schema/vbm/service/service-feasibility/v1"
+        xmlns:vbs="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1"
+        targetNamespace="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1"
+        name="CheckServiceFeasibility">
+
+    <wsdl:documentation>
+        A Task service that enables a consuming system to query the feasibility of a Vodafone service at a given
+        location.
+        Version V1.0
+    </wsdl:documentation>
+
+    <!-- Show support for WS-Policy and the attachment of policy assertions -->
+    <wsp:UsingPolicy wsdl:Required="true"/>
+
+    <!-- The categorisation of the service as defined by the service architecture -->
+    <wssem:category
+            name="TaskService"
+            taxonomyURI="http://group.vodafone.com/iCoE/Taxonomy.owl#"/>
+
+    <wsdl:types>
+        <xsd:schema
+                targetNamespace="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1"
+                elementFormDefault="qualified">
+            <xsd:import
+                    namespace="http://group.vodafone.com/schema/vbm/service/service-feasibility/v1"
+                    schemaLocation="CheckServiceFeasibility.ServiceFeasibilityVBM.xsd"/>
+            <xsd:import
+                    namespace="http://group.vodafone.com/contract/vfo/fault/v1"
+                    schemaLocation="CheckServiceFeasibility.Fault.xsd"/>
+            <xsd:import
+                    namespace="http://group.vodafone.com/contract/vho/header/v1"
+                    schemaLocation="CheckServiceFeasibility.Header.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+
+
+    <wsdl:message name="CheckServiceFeasibilityReqMessage">
+        <wsdl:documentation>
+            This message is used as the request payload to the CheckServiceFeasibility operation
+        </wsdl:documentation>
+        <wsdl:part
+                name="ServiceFeasibilityDetails"
+                element="vbm:CheckServiceFeasibilityVBMRequest"/>
+    </wsdl:message>
+
+    <wsdl:message name="CheckServiceFeasibilityRespMessage">
+        <wsdl:documentation>
+            This message is used as the response payload to the CheckServiceFeasibility operation
+        </wsdl:documentation>
+        <wsdl:part
+                name="ServiceFeasibilityDetails"
+                element="vbm:CheckServiceFeasibilityVBMResponse"/>
+    </wsdl:message>
+
+    <!--Supporting Messages-->
+    <wsdl:message name="VodafoneFault">
+        <wsdl:documentation>
+            This message is used for propagating Error Context and Error Message
+        </wsdl:documentation>
+        <wsdl:part
+                name="VodafoneFault"
+                element="vfo:Fault"/>
+    </wsdl:message>
+
+    <wsdl:message name="MessageHeaders">
+        <wsdl:documentation>
+            This message is used as the header for SOAP request
+        </wsdl:documentation>
+        <wsdl:part
+                name="Source"
+                element="vho:Source"/>
+        <wsdl:part
+                name="Correlation"
+                element="vho:Correlation"/>
+        <wsdl:part
+                name="Cache"
+                element="vho:Cache"/>
+        <wsdl:part
+                name="ServiceDocumentation"
+                element="vho:ServiceDocumentation"/>
+        <wsdl:part
+                name="ResultStatus"
+                element="vho:ResultStatus"/>
+        <wsdl:part
+                name="Destination"
+                element="vho:Destination"/>
+    </wsdl:message>
+
+    <wsdl:portType name="CheckServiceFeasibilityInterface">
+        <wsdl:documentation>
+            This interface contains operations for the ServiceFeasibility API
+        </wsdl:documentation>
+        <wsdl:operation name="CheckServiceFeasibility">
+            <wsdl:documentation>
+                This operation is used to CheckServiceFeasibility
+            </wsdl:documentation>
+            <wsdl:input
+                    name="CheckServiceFeasibilityRequest"
+                    message="vbs:CheckServiceFeasibilityReqMessage"
+                    wsaw:Action="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"/>
+            <wsdl:output
+                    name="CheckServiceFeasibilityResponse"
+                    message="vbs:CheckServiceFeasibilityRespMessage"/>
+            <wsdl:fault
+                    name="VodafoneFault"
+                    message="vbs:VodafoneFault"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+
+    <wsdl:portType name="CheckServiceFeasibilityReqInterface">
+        <wsdl:documentation>A Port-Type supporting the Asynchronous Request-Reply interface for the Check operation.
+            This Port-Type must be used for the Request.
+        </wsdl:documentation>
+        <wsdl:operation name="CheckServiceFeasibility">
+            <wsdl:input
+                    name="CheckServiceFeasibilityRequest"
+                    message="vbs:CheckServiceFeasibilityReqMessage"
+                    wsaw:Action="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:portType name="CheckServiceFeasibilityRespInterface">
+        <wsdl:documentation>A Port-Type supporting the Asynchronous Request-Reply interface for the Check operation.
+            This Port-Type must be used for the Response.
+        </wsdl:documentation>
+        <wsdl:operation name="CheckServiceFeasibility">
+            <wsdl:input
+                    name="CheckServiceFeasibilityResponse"
+                    message="vbs:CheckServiceFeasibilityRespMessage"
+                    wsaw:Action="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding
+            name="CheckServiceFeasibilityInterface-SOAP11-HTTPBinding"
+            type="vbs:CheckServiceFeasibilityInterface">
+        <wsdl:documentation>
+            This binding supports a SOAP 1.1 message over an HTTP/1.1 protocol
+        </wsdl:documentation>
+
+        <soap11:binding
+                style="document"
+                transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- Use WS-Addressing v1.0 -->
+        <wsaw:UsingAddressing wsdl:required="true"/>
+
+
+        <wsdl:operation name="CheckServiceFeasibility">
+            <soap11:operation
+                    soapAction="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"
+                    style="document"/>
+
+            <wsdl:input name="CheckServiceFeasibilityRequest">
+                <!--
+                    Require that messages contain some custom headers for tracking, routing, auditing.
+                -->
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Source"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Correlation"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Cache"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Destination"
+                        use="literal"/>
+                <soap11:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="CheckServiceFeasibilityResponse">
+                <!--
+                    Require that messages contain some custom headers for tracking, routing, auditing.
+                -->
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Correlation"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Cache"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="ServiceDocumentation"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="ResultStatus"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Destination"
+                        use="literal"/>
+                <soap11:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="VodafoneFault">
+                <soap11:fault
+                        name="VodafoneFault"
+                        use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+
+    <wsdl:binding
+            name="CheckServiceFeasibilityReqInterface-SOAP11-HTTPBinding"
+            type="vbs:CheckServiceFeasibilityReqInterface">
+        <wsdl:documentation>
+            This binding supports a SOAP 1.1 message over an HTTP/1.1 protocol
+        </wsdl:documentation>
+
+        <soap11:binding
+                style="document"
+                transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- Use WS-Addressing v1.0 -->
+        <wsaw:UsingAddressing wsdl:required="true"/>
+
+
+        <wsdl:operation name="CheckServiceFeasibility">
+            <soap11:operation
+                    soapAction="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"
+                    style="document"/>
+
+            <wsdl:input name="CheckServiceFeasibilityRequest">
+                <!--
+                    Require that messages contain some custom headers for tracking, routing, auditing.
+                -->
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Source"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Correlation"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Cache"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Destination"
+                        use="literal"/>
+                <soap11:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:binding
+            name="CheckServiceFeasibilityRespInterface-SOAP11-HTTPBinding"
+            type="vbs:CheckServiceFeasibilityRespInterface">
+        <wsdl:documentation>
+            This binding supports a SOAP 1.1 message over an HTTP/1.1 protocol
+        </wsdl:documentation>
+
+        <soap11:binding
+                style="document"
+                transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- Use WS-Addressing v1.0 -->
+        <wsaw:UsingAddressing wsdl:required="true"/>
+
+
+        <wsdl:operation name="CheckServiceFeasibility">
+            <soap11:operation
+                    soapAction="http://group.vodafone.com/contract/vbs/service/check-service-feasibility/v1/check"
+                    style="document"/>
+
+            <wsdl:input name="CheckServiceFeasibilityResponse">
+                <!--
+                    Require that messages contain some custom headers for tracking, routing, auditing.
+                -->
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Source"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Correlation"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Cache"
+                        use="literal"/>
+                <soap11:header
+                        message="vbs:MessageHeaders"
+                        part="Destination"
+                        use="literal"/>
+                <soap11:body use="literal"/>
+            </wsdl:input>
+        </wsdl:operation>
+    </wsdl:binding>
+
+</wsdl:definitions>
