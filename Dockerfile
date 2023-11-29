@@ -1,6 +1,7 @@
 FROM 728642754198.dkr.ecr.eu-central-1.amazonaws.com/dxl-ie:ga-open-11-jre-quarkus-1.0.0-a
 
 RUN mkdir /deployments
+ENV KEYSTORE_PATH /deployments/ssl/keystore.jks
 
 WORKDIR /deployments
 
@@ -17,4 +18,4 @@ USER vfuser
 
 EXPOSE 8080
 
-ENTRYPOINT exec java $JAVA_OPTS -jar ./quarkus-run.jar -Dquarkus.http.host=0.0.0.0
+ENTRYPOINT exec java $JAVA_OPTS -Djavax.net.ssl.keyStore=${KEYSTORE_PATH} -Djavax.net.ssl.keyStorePassword=${keystorePass} -jar ./quarkus-run.jar -Dquarkus.http.host=0.0.0.0
