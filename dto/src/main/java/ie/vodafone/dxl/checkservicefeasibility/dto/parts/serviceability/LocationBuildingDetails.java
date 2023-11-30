@@ -1,11 +1,18 @@
 package ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
-public class LocationBuildingDetails {
+@NoArgsConstructor
+@AllArgsConstructor
+public class LocationBuildingDetails implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private BigDecimal latitude;
     private BigDecimal longitude;
 }

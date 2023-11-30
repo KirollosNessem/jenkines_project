@@ -2,12 +2,19 @@ package ie.vodafone.dxl.checkservicefeasibility.dto;
 
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.Category;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemResponse;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Data
-public class CheckServiceFeasibilityResponse {
+@NoArgsConstructor
+@AllArgsConstructor
+public class CheckServiceFeasibilityResponse implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private List<Category> category;
     private List<LineItemResponse> lineItem;
     private Boolean indicator;
