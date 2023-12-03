@@ -21,8 +21,10 @@ public class Constants {
         public static final String LOCATION_ID_IS_REQUIRED = "locationID is required";
         public static final String ORDER_ALREADY_EXIST = "Order No already present in the system";
         public static final String PREMISES_ID_NOT_SPECIFIED = "Premises Id not specified";
-        public static final CharSequence MISSING_MANDATORY = "missing mandatory";
-        public static final CharSequence INVALID_UAN = "not a valid UAN";
+        public static final String MISSING_MANDATORY = "missing mandatory";
+        public static final String INVALID_UAN = "not a valid UAN";
+        public static final String REQUEST_FAILED_VALIDATION = "Request Body Failed Validation";
+        public static final String NBI = "NBI";
     }
 
     public static class IndexKeys {
