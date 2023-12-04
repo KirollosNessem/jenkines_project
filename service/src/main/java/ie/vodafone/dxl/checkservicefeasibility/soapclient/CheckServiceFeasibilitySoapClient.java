@@ -138,16 +138,18 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
     }
 
     private void handleResultStatusErrors(CompletableFuture<Object> future, DXLException exception) {
-        logger.error(exception.getMessage());
-
-        if (exception.getMessage().contains(Constants.ErrorMessages.PREMISES_ID_NOT_SPECIFIED)) {
+        String exceptionMessage = exception.getMessage();
+        logger.error(exceptionMessage);
+        if (exceptionMessage.contains(Constants.ErrorMessages.PREMISES_ID_NOT_SPECIFIED)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.PREMISES_ID_NOT_SPECIFIED));
-        } else if (exception.getMessage().contains(Constants.ErrorMessages.MISSING_MANDATORY)) {
+        } else if (exceptionMessage.contains(Constants.ErrorMessages.MISSING_MANDATORY)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
-        } else if (exception.getMessage().contains(Constants.ErrorMessages.INVALID_UAN)) {
+        } else if (exceptionMessage.contains(Constants.ErrorMessages.INVALID_UAN)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_UAN));
+        } else if (exceptionMessage.contains(Constants.ErrorMessages.REQUEST_FAILED_VALIDATION) && exceptionMessage.contains(Constants.ErrorMessages.NBI)) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_NBI_VALUE));
         }
-        future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exception.getMessage(), ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
+        future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exceptionMessage, ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
     }
 
     private ResultStatus getResultStatus(BindingProvider bindingProvider) throws DXLException {
