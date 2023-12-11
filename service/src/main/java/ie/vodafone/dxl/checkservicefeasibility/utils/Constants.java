@@ -25,6 +25,9 @@ public class Constants {
         public static final String INVALID_UAN = "not a valid UAN";
         public static final String REQUEST_FAILED_VALIDATION = "Request Body Failed Validation";
         public static final String NBI = "NBI";
+        public static final String UNEXPECTED_ERROR = "Unexpected error at 'ProductGetAvailable_v2'";
+        public static final String PREMISSES_NOT_FOUND = "Premises not found";
+
     }
 
     public static class IndexKeys {

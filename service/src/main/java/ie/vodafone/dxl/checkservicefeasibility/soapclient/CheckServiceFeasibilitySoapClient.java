@@ -146,6 +146,10 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
         } else if (exceptionMessage.contains(Constants.ErrorMessages.INVALID_UAN)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_UAN));
+        } else if (exceptionMessage.contains(Constants.ErrorMessages.UNEXPECTED_ERROR)) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.UNEXPECTED_ERROR));
+        } else if (exceptionMessage.contains(Constants.ErrorMessages.PREMISSES_NOT_FOUND)) {
+            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.PREMISSES_NOT_FOUND));
         } else if (exceptionMessage.contains(Constants.ErrorMessages.REQUEST_FAILED_VALIDATION) && exceptionMessage.contains(Constants.ErrorMessages.NBI)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_NBI_VALUE));
         }
