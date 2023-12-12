@@ -11,7 +11,8 @@ public enum ErrorMessageEnum {
     INVALID_CONTENT("CSF106", "Invalid content was found"),
     INVALID_NBI_VALUE("CSF107", "Request Body Failed Validation with NBI"),
     UNEXPECTED_ERROR("CSF108", "Unexpected error at 'ProductGetAvailable_v2'"),
-    PREMISSES_NOT_FOUND("CSF109", "Premises not found");
+    PREMISSES_NOT_FOUND("CSF109", "Premises not found"),
+    ENUMERATION_ERROR("CSF110", "Enumeration validation failed");
 
     private String errorCode;
     private String message;
