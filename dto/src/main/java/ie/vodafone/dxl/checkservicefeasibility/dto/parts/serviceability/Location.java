@@ -6,13 +6,13 @@ import lombok.Data;
 
 @Data
 public class Location {
-    private String premissedId;
+    private String premissesId;
     private String nbiEircode;
     private String vmLocationId;
     private String ardkey;
 
     public boolean isEmpty() {
-        return StringUtils.isEmpty(premissedId)
+        return StringUtils.isEmpty(premissesId)
                 && StringUtils.isEmpty(nbiEircode)
                 && StringUtils.isEmpty(vmLocationId)
                 && StringUtils.isEmpty(ardkey);

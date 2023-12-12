@@ -9,7 +9,9 @@ public enum ErrorMessageEnum {
     LOCATION_ID_IS_REQUIRED("CSF104", "locationID is required"),
     INVALID_PRODUCT_TYPE("CSF105", "Invalid ProductType parameter"),
     INVALID_CONTENT("CSF106", "Invalid content was found"),
-    INVALID_NBI_VALUE("CSF107", "Request Body Failed Validation with NBI");
+    INVALID_NBI_VALUE("CSF107", "Request Body Failed Validation with NBI"),
+    UNEXPECTED_ERROR("CSF108", "Unexpected error at 'ProductGetAvailable_v2'"),
+    PREMISSES_NOT_FOUND("CSF109", "Premises not found");
 
     private String errorCode;
     private String message;
