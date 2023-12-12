@@ -439,7 +439,7 @@ public class CheckServiceAbilityMapper {
         PostalAddressWithLocationType.IDs iDs = new PostalAddressWithLocationType.IDs();
         WSUtils.addIdIfExists(iDs, location.getVmLocationId(), Constants.CheckServiceAbilityRequest.VM_LOCATION_ID);
         WSUtils.addIdIfExists(iDs, location.getArdkey(), Constants.CheckServiceFeasibilityRequest.ARD_KEY);
-        WSUtils.addIdIfExists(iDs, location.getPremissesId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
+        WSUtils.addIdIfExists(iDs, location.getPremisesId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
         WSUtils.addIdIfExists(iDs, location.getNbiEircode(), Constants.CheckServiceAbilityRequest.NBI_EIRCODE);
         serviceFeasibilityLocation.setIDs(iDs);
         parts.setLocation(serviceFeasibilityLocation);
