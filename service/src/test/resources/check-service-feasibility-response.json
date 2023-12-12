@@ -1,17 +1,9 @@
 {
-  "category": [
-    {
-      "systemsToCall": "EligibilityCheck"
-    }
-  ],
+  "systemsToCall": "EligibilityCheck",
   "lineItem": [
     {
       "status": "OK",
-      "category": [
-        {
-          "eligibilityStatus": "Passed"
-        }
-      ]
+      "eligibilityStatus": "Passed"
     }
   ],
   "indicator": true,

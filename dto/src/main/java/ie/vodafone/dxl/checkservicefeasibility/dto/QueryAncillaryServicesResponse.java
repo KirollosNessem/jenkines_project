@@ -1,7 +1,6 @@
 package ie.vodafone.dxl.checkservicefeasibility.dto;
 
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.LineItem;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.Specification;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,7 @@ public class QueryAncillaryServicesResponse implements Serializable {
 
     private String qaOrderId;
     private String name;
-    private Specification specification;
+    private String pendingOrders;
+    private String tosFlag;
     private List<LineItem> lineItem;
 }

@@ -18,15 +18,12 @@ import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceSpecT
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceFeasibilityRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceFeasibilityResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.Category;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemCategory;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.ServiceSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.SpecificationRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.SpecificationResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.SubSpecification;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.SubSpecificationCategory;
 import ie.vodafone.dxl.checkservicefeasibility.utils.Constants;
 import ie.vodafone.dxl.checkservicefeasibility.utils.WSUtils;
 import ie.vodafone.dxl.utils.common.CollectionUtils;
@@ -212,16 +209,11 @@ public class CheckServiceFeasibilityMapper {
         if (categories == null || CollectionUtils.isEmpty(categories.getCategory())) {
             return;
         }
-        List<SubSpecificationCategory> categoryList = new ArrayList<>();
-
         for (BaseComponentType.Categories.Category category : categories.getCategory()) {
-            SubSpecificationCategory mappedCategory = new SubSpecificationCategory();
             if (Constants.ServiceSpecificationsResponse.ACTION_FLAG.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setActionFlag(category.getValue());
+                specification.setActionFlag(category.getValue());
             }
-            categoryList.add(mappedCategory);
         }
-        specification.setCategory(categoryList);
     }
 
     private static void mapServiceSubSpecificationIDs(SubSpecification specification, InfoComponentType.IDs iDs) {
@@ -241,17 +233,13 @@ public class CheckServiceFeasibilityMapper {
         if (CollectionUtils.isEmpty(categoryList)) {
             return;
         }
-        List<LineItemCategory> mappedCategories = new ArrayList<>();
         for (BaseComponentType.Categories.Category category : categoryList) {
-            LineItemCategory mappedCategory = new LineItemCategory();
             if (Constants.CheckServiceFeasibilityResponse.ACTION_FLAG.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setActionFlag(category.getValue());
+                response.setActionFlag(category.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ELIGIBILITY_STATUS.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setEligibilityStatus(category.getValue());
+                response.setEligibilityStatus(category.getValue());
             }
-            mappedCategories.add(mappedCategory);
         }
-        response.setCategory(mappedCategories);
     }
 
     private static void mapLineItemResponseIDs(LineItemResponse response, List<IDType> idTypeList) {
@@ -319,19 +307,15 @@ public class CheckServiceFeasibilityMapper {
         if (CollectionUtils.isEmpty(categories)) {
             return;
         }
-        List<Category> mappedCategories = new ArrayList<>();
         for (BaseComponentType.Categories.Category category : categories) {
-            Category mappedCategory = new Category();
             if (Constants.CheckServiceFeasibilityResponseCategories.SYSTEMS_TO_CALL.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setSystemsToCall(category.getValue());
+                response.setSystemsToCall(category.getValue());
             } else if (Constants.CheckServiceFeasibilityResponseCategories.PENDING_ORDERS.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setPendingOrders(category.getValue());
+                response.setPendingOrders(category.getValue());
             } else if (Constants.CheckServiceFeasibilityResponseCategories.TOS_FLAG.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setTosFlag(category.getValue());
+                response.setTosFlag(category.getValue());
             }
-            mappedCategories.add(mappedCategory);
         }
-        response.setCategory(mappedCategories);
     }
 
     private static void mapLineItemRequest(List<LineItemRequest> lineItem, ServiceFeasibilityPartsType parts) {

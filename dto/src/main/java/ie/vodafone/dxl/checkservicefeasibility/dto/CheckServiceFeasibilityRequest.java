@@ -1,8 +1,8 @@
 package ie.vodafone.dxl.checkservicefeasibility.dto;
 
 
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.Location;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.LineItemRequest;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.servicefeasibility.Location;
 import ie.vodafone.dxl.utils.common.CollectionUtils;
 import ie.vodafone.dxl.utils.common.StringUtils;
 import lombok.Data;

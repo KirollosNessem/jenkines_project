@@ -1,8 +1,6 @@
 {
-  "qaOrderId":"343327",
-  "specification": {
-    "tosFlag": "N"
-  },
+  "qaOrderId": "343327",
+  "tosFlag": "N",
   "lineItem": [
     {
       "status": "C",
@@ -11,11 +9,7 @@
         "broadbandService": "FTC",
         "type": "FTC"
       },
-      "category": [
-        {
-          "actionFlag": "L"
-        }
-      ]
+      "actionFlag": "L"
     }
   ]
 }

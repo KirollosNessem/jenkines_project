@@ -22,7 +22,8 @@ public class LineItemResponse implements Serializable {
     private String addressId;
     private String orderId;
     private String valid;
-    private List<LineItemCategory> category;
+    private String actionFlag;
+    private String eligibilityStatus;
     private SpecificationResponse specification;
     private List<ServiceSpecification> serviceSpecification;
 }
