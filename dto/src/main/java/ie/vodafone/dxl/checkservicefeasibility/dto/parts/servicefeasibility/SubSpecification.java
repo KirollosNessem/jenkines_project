@@ -5,7 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,7 +14,7 @@ public class SubSpecification implements Serializable {
 
     private String asCode;
     private String teleNo;
-    private List<SubSpecificationCategory> category;
+    private String actionFlag;
     private String service;
     private String ontType;
     private String installationType;

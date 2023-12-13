@@ -18,5 +18,5 @@ public class LineItem implements Serializable {
     private String cli;
     private LineItemSpecification specification;
     private List<ServiceSpecification> serviceSpecification;
-    private List<Category> category;
+    private String actionFlag;
 }

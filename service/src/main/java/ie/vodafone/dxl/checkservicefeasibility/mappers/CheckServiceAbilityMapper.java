@@ -16,14 +16,12 @@ import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceAbilityRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.CheckServiceAbilityResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.LineItem;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Location;
+import ie.vodafone.dxl.checkservicefeasibility.dto.parts.Location;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Address;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.AddressCategory;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.AddressSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.BuildingDetails;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.BuildingDetailsServiceSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.BuildingDetailsSpecification;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.Category;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.EligibilityDetails;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.EligibilityDetailsServiceSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.serviceability.EligibilityDetailsSpecification;
@@ -263,15 +261,11 @@ public class CheckServiceAbilityMapper {
         if (CollectionUtils.isEmpty(categoryList)) {
             return;
         }
-        List<AddressCategory> categories = new ArrayList<>();
         for (BaseComponentType.Categories.Category category : categoryList) {
             if (Constants.BuildingDetails.EIR_CODE.equals(category.getListName())) {
-                AddressCategory addressCategory = new AddressCategory();
-                addressCategory.setEircode(category.getValue());
-                categories.add(addressCategory);
+                address.setEircode(category.getValue());
             }
         }
-        address.setCategory(categories);
     }
 
     private static void mapAddressIDs(Address address, List<IDType> ids) {
@@ -321,14 +315,10 @@ public class CheckServiceAbilityMapper {
         if (CollectionUtils.isEmpty(categories)) {
             return;
         }
-        List<Category> categoryResponseList = new ArrayList<>();
         for (BaseComponentType.Categories.Category category : categories) {
             if (Constants.BuildingDetails.BUILDING_ADDRESS.equals(category.getListName())) {
-                Category buildingAddress = new Category();
-                buildingAddress.setBuildingAddress(category.getValue());
-                categoryResponseList.add(buildingAddress);
+                buildingDetails.setBuildingAddress(category.getValue());
             }
-            buildingDetails.setCategory(categoryResponseList);
         }
     }
 

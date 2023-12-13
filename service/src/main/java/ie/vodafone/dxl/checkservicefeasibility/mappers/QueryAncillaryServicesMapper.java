@@ -16,12 +16,9 @@ import com.vodafone.group.schema.vbo.service.service_feasibility.v1.ServiceSpecT
 import ie.vodafone.dxl.checkservicefeasibility.dto.QueryAncillaryServicesRequest;
 import ie.vodafone.dxl.checkservicefeasibility.dto.QueryAncillaryServicesResponse;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.ResultStatus;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.Category;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.LineItem;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.LineItemSpecification;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.LineItemSubSpecification;
 import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.ServiceSpecification;
-import ie.vodafone.dxl.checkservicefeasibility.dto.parts.queryancillaryservices.Specification;
 import ie.vodafone.dxl.checkservicefeasibility.utils.Constants;
 import ie.vodafone.dxl.checkservicefeasibility.utils.WSUtils;
 import ie.vodafone.dxl.utils.common.CollectionUtils;
@@ -118,22 +115,20 @@ public class QueryAncillaryServicesMapper {
     }
 
     private static void mapLineItemSubSpecifications(ServiceSpecification serviceSpecification, ServiceSpecSpecificationType specificationType) {
-        LineItemSubSpecification specification = new LineItemSubSpecification();
         if (CollectionUtils.isNotEmpty(specificationType.getCharacteristicsValue())) {
             for (SpecificationType.CharacteristicsValue characteristicsValue : specificationType.getCharacteristicsValue()) {
                 if (Constants.QueryAncillaryServicesRequest.ACTION_FLAG.equalsIgnoreCase(characteristicsValue.getCharacteristicName())) {
-                    specification.setActionFlag(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
+                    serviceSpecification.setActionFlag(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
                 }
             }
         }
         if (specificationType.getIDs() != null && CollectionUtils.isNotEmpty(specificationType.getIDs().getID())) {
             for (IDType idType : specificationType.getIDs().getID()) {
                 if (Constants.QueryAncillaryServicesRequest.TELE_NO.equalsIgnoreCase(idType.getSchemeName())) {
-                    specification.setTeleNo(idType.getValue());
+                    serviceSpecification.setTeleNo(idType.getValue());
                 }
             }
         }
-        serviceSpecification.setSpecification(specification);
     }
 
     private static void mapLineItemSpecifications(LineItem lineItem, ServiceFeasibilityLineItemSpecificationType specificationType) {
@@ -162,15 +157,11 @@ public class QueryAncillaryServicesMapper {
         if (CollectionUtils.isEmpty(categoryList)) {
             return;
         }
-        List<Category> mappedCategoryList = new ArrayList<>();
         for (BaseComponentType.Categories.Category category : categoryList) {
-            Category mappedCategory = new Category();
             if (Constants.QueryAncillaryServicesRequest.ACTION_FLAG.equalsIgnoreCase(category.getName())) {
-                mappedCategory.setActionFlag(category.getValue());
+                lineItem.setActionFlag(category.getValue());
             }
-            mappedCategoryList.add(mappedCategory);
         }
-        lineItem.setCategory(mappedCategoryList);
     }
 
     private static void mapLineItemIDs(LineItem lineItem, List<IDType> idTypeList) {
@@ -188,15 +179,13 @@ public class QueryAncillaryServicesMapper {
         if (CollectionUtils.isEmpty(characteristicsValueList)) {
             return;
         }
-        Specification specification = new Specification();
         for (SpecificationType.CharacteristicsValue characteristicsValue : characteristicsValueList) {
             if (Constants.QueryAncillaryServicesRequest.PENDING_ORDERS.equalsIgnoreCase(characteristicsValue.getCharacteristicName())) {
-                specification.setPendingOrders(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
+                response.setPendingOrders(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
             } else if (Constants.QueryAncillaryServicesRequest.TOS_FLAG.equalsIgnoreCase(characteristicsValue.getCharacteristicName())) {
-                specification.setTosFlag(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
+                response.setTosFlag(WSUtils.getValueFromTextType(characteristicsValue.getValue()));
             }
         }
-        response.setSpecification(specification);
     }
 
     private static void mapRequesterIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, String uan) {

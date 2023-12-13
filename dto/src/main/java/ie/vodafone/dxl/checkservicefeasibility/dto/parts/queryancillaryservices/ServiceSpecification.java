@@ -13,5 +13,6 @@ public class ServiceSpecification implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String type;
-    private LineItemSubSpecification specification;
+    private String actionFlag;
+    private String teleNo;
 }

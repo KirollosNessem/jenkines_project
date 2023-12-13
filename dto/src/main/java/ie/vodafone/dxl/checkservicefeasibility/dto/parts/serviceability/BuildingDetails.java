@@ -15,7 +15,7 @@ public class BuildingDetails implements Serializable {
 
     private String id;
     private String interventionArea;
-    private List<Category> category;
+    private String buildingAddress;
     private BuildingDetailsSpecification specification;
     private List<BuildingDetailsServiceSpecification> serviceSpecifications;
     private LocationBuildingDetails location;
