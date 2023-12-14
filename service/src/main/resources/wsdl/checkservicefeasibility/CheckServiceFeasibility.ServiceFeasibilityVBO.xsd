@@ -1,0 +1,635 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2014 rel. 2 (x64) (http://www.altova.com) by Lorenzo Dal Rio (Reply Ltd) -->
+<!--(c) Vodafone Group Services Limited. All rights reserved.
+This document comprises proprietary and confidential information and copyright material belonging to Vodafone Group Services Limited.
+Other than as permitted by law, no part of this document may be reproduced, adapted, or distributed, in any form or by any means, without
+the prior written consent of Vodafone Group Services Limited.
+The information in this document is subject to change without notice.
+All trademarks acknowledged.
+Vodafone Group Services Limited - Confidential-->
+<xsd:schema
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:tns="http://group.vodafone.com/schema/vbo/service/service-feasibility/v1"
+	xmlns:extvbo="http://group.vodafone.com/schema/extension/vbo/service/service-feasibility/v1"
+	xmlns:cct="urn:un:unece:uncefact:documentation:standard:CoreComponentType:2"
+	xmlns:cmn="http://group.vodafone.com/schema/common/v1"
+	targetNamespace="http://group.vodafone.com/schema/vbo/service/service-feasibility/v1"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	version="1.0">
+
+	<xsd:annotation>
+		<xsd:documentation>Schema definition for ServiceFeasibility.</xsd:documentation>
+	</xsd:annotation>
+
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/common/v1"
+		schemaLocation="CheckServiceFeasibility.CommonComponents.xsd" />
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/extension/vbo/service/service-feasibility/v1"
+		schemaLocation="CheckServiceFeasibility.ExtendedServiceFeasibilityVBO.xsd" />
+	<xsd:import
+		namespace="urn:un:unece:uncefact:documentation:standard:CoreComponentType:2"
+		schemaLocation="CheckServiceFeasibility.CoreComponentType_2p0.xsd" />
+	<xsd:import
+		namespace="http://group.vodafone.com/schema/common/v1"
+		schemaLocation="CheckServiceFeasibility.Meta.xsd" />
+
+
+	<xsd:complexType name="ServiceFeasibilityVBOType">
+		<xsd:annotation>
+			<xsd:documentation>
+				A VBO that enables a consuming system to query and check the feasibility of a Vodafone service at a given location.
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:ExtendedBaseComponentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Details"
+						type="tns:ServiceFeasibilityDetailsType"
+						minOccurs="0" />
+					<xsd:element
+						name="RelatedServiceFeasibilities"
+						minOccurs="0">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element
+									name="RelatedServiceFeasibility"
+									type="tns:RelatedServiceFeasibilityType"
+									maxOccurs="unbounded" />
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element
+						name="Roles"
+						type="tns:ServiceFeasibilityRolesType"
+						minOccurs="0" />
+					<xsd:element
+						name="Parts"
+						type="tns:ServiceFeasibilityPartsType"
+						minOccurs="0" />
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityVBOType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityDetailsType">
+		<xsd:annotation>
+			<xsd:documentation> A type definition for ServiceFeasibility Details</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="ManualIndicator"
+				type="cct:IndicatorType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>Indicates that a manual feasibility check is being requested or has been performed, it is expected that this will trigger a long-running process to assess complex solutions and/or service specifications and locations that have a low feasibility.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="StudyLevelCode"
+				type="cct:CodeType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A classification of the level or urgency in which the feasibility is required if in the request or to which it was carried out in the response.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Extension"
+				type="extvbo:ExtendedServiceFeasibilityDetailsType"
+				minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute
+			name="actionCode"
+			type="cmn:ActionCodeType"
+			use="optional" />
+	</xsd:complexType>
+
+	<xsd:complexType name="RelatedServiceFeasibilityType">
+		<xsd:annotation>
+			<xsd:documentation>A type definition for Related ServiceFeasibility Type</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:BaseComponentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedRelatedServiceFeasibilityType"
+						minOccurs="0" />
+				</xsd:sequence>
+				<xsd:attribute
+					name="relationshipTypeCode"
+					type="xsd:token"
+					use="optional">
+					<xsd:annotation>
+						<xsd:documentation>An attribute to hold the type of relationship between this Service Feasibility and the referenced target.</xsd:documentation>
+					</xsd:annotation>
+				</xsd:attribute>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityRolesType">
+		<xsd:sequence>
+			<xsd:element
+				name="Requestor"
+				type="tns:ServiceFeasibilityRequestorType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The individual or organisation that is making the request to check the feasibility of the service.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Extension"
+				type="extvbo:ExtendedServiceFeasibilityRolesType"
+				minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityRequestorType">
+		<xsd:complexContent>
+			<xsd:extension base="cmn:IndividualAndOrganisationWithContactPartyRoleReferenceType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityRequestorType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityPartsType">
+		<xsd:sequence>
+			<xsd:element
+				name="Cost"
+				type="tns:ServiceFeasibilityCostType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The costs associated with the feasibility request across all line items.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+
+			<xsd:element
+				name="SalesOpportunity"
+				type="tns:SalesOpportunityReferenceType"
+				minOccurs="0" />
+			<xsd:element
+				name="SalesQuote"
+				type="tns:SalesQuoteReferenceType"
+				minOccurs="0" />
+
+			<xsd:element
+				name="Specification"
+				type="tns:ServiceFeasibilitySpecificationType"
+				minOccurs="0" />
+
+			<xsd:element
+				name="StatusHistory"
+				type="tns:ServiceFeasibilityStatusHistoryType"
+				minOccurs="0" />
+
+			<xsd:element
+				name="Notes"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A set of notes that may be made against a particular Service Feasibility request in this study.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+							name="Note"
+							type="tns:ServiceFeasibilityNoteType"
+							maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A note made against the Service Feasibility request for this feasibility study; free-text, ad-hoc comments.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element
+				name="Documents"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The set of documents associated with this feasibility check, either supplied by the requester or returned by the feasibility study itself.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+							name="Document"
+							type="tns:ServiceFeasibilityAttachmentType"
+							maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A document associated with the service feasibility.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element
+				name="Location"
+				type="tns:ServiceFeasibilityLocationType"
+				minOccurs="0" />
+
+			<xsd:element
+				name="LineItems"
+				minOccurs="1">
+				<xsd:annotation>
+					<xsd:documentation>The set of feasibility detail specifications that represent a specific feasibility of a set of service specifications.</xsd:documentation>
+				</xsd:annotation>
+				<xsd:complexType>
+					<xsd:sequence>
+						<xsd:element
+							name="LineItem"
+							type="tns:ServiceFeasibilityLineItemType"
+							maxOccurs="unbounded">
+							<xsd:annotation>
+								<xsd:documentation>A detail specification of the feasibility of a set of service specifications in the location requested.</xsd:documentation>
+							</xsd:annotation>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+
+			<xsd:element
+				name="Extension"
+				type="extvbo:ExtendedServiceFeasibilityPartsType"
+				minOccurs="0" />
+		</xsd:sequence>
+	</xsd:complexType>
+
+	<xsd:complexType name="SalesOpportunityReferenceType">
+		<xsd:complexContent>
+			<xsd:extension base="cmn:BaseComponentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedSalesOpportunityType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="SalesQuoteReferenceType">
+		<xsd:complexContent>
+			<xsd:extension base="cmn:BaseComponentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedSalesQuoteType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+
+
+	<xsd:complexType name="ServiceFeasibilitySpecificationType">
+		<xsd:annotation>
+			<xsd:documentation>A component used to store characteristics of the Service Feasibility. Relates to the Feasibility Spec in the Information Model.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:SpecificationType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilitySpecificationType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityCostType">
+		<xsd:annotation>
+			<xsd:documentation></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:AmountsType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityCostType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="ServiceFeasibilityStatusHistoryType">
+		<xsd:annotation>
+			<xsd:documentation>The state lifecycle history of the Service Feasibility.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:StatusHistoryType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityStatusHistoryType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityAttachmentType">
+		<xsd:annotation>
+			<xsd:documentation>A document associated with the service feasibility.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:AttachmentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityAttachmentType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityNoteType">
+		<xsd:annotation>
+			<xsd:documentation>A comment or note about the Service Feasibility.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:NoteType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityNoteType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityLocationType">
+		<xsd:annotation>
+			<xsd:documentation>The postal address or geographical location (installation site) of the feasibility study.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:PostalAddressWithLocationType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityLocationType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityLineItemType">
+		<xsd:annotation>
+			<xsd:documentation>A detail specification of the feasibility of a set of service specifications in the location requested.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:ExtendedBaseComponentType">
+				<xsd:sequence>
+
+					<xsd:element
+						name="Cost"
+						type="tns:ServiceFeasibilityCostType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The set of costs associated with the feasibility study for the specs in the location given.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="Score"
+						type="tns:ServiceFeasibilityLineItemScoreType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The feasibility score for this Line Item with the larger Feasibility request.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="Notes"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>A set of notes that may be made against a particular LineItem in this study.</xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element
+									name="Note"
+									type="tns:ServiceFeasibilityNoteType"
+									maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation>A note made against the LineItem for this feasibility study; free-text, ad-hoc comments.</xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+
+					<xsd:element
+						name="Reason"
+						type="tns:ServiceFeasibilityLineItemReasonType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The reason why the specified service specs are or are not possible in the location given.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="Location"
+						type="tns:ServiceFeasibilityLocationType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The postal address or geographical location (installation site) of this line item of the feasibility study.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="Resolution"
+						type="cmn:TimePeriodType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation>The resolution time for the feasibility study.</xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="Specification"
+						type="tns:ServiceFeasibilityLineItemSpecificationType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation></xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+
+					<xsd:element
+						name="ServiceSpecifications"
+						minOccurs="1">
+						<xsd:annotation>
+							<xsd:documentation></xsd:documentation>
+						</xsd:annotation>
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element
+									name="ServiceSpecification"
+									type="tns:ServiceSpecType"
+									maxOccurs="unbounded">
+									<xsd:annotation>
+										<xsd:documentation></xsd:documentation>
+									</xsd:annotation>
+								</xsd:element>
+							</xsd:sequence>
+						</xsd:complexType>
+					</xsd:element>
+
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityLineItemType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+
+
+	<xsd:complexType name="ServiceFeasibilityLineItemScoreType">
+		<xsd:annotation>
+			<xsd:documentation>The feasibility score for this Line Item with the larger Feasibility request.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="Code"
+				type="cct:CodeType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The Feasibility Score (rating) code of the study or a particular LineItem within the study.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Number"
+				type="cct:NumericType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>The Feasibility Score (Rating) as a number, can be used to support a sliding scale, e.g. a number between 1 - 100.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Extension"
+				type="extvbo:ExtendedServiceFeasibilityLineItemScoreType"
+				minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute
+			name="actionCode"
+			type="cmn:ActionCodeType"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The @actionCode attribute is used within a modification operation to indicate the action (add, update, delete) intended on a component.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceFeasibilityLineItemReasonType">
+		<xsd:annotation>
+			<xsd:documentation>The reason why the specified service specs are or are not possible in the location given.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:sequence>
+			<xsd:element
+				name="Text"
+				type="cct:TextType">
+				<xsd:annotation>
+					<xsd:documentation>Textual description of the reason why the feasibility of these service specifications in the location given is or is not possible.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Code"
+				type="cct:CodeType"
+				minOccurs="0">
+				<xsd:annotation>
+					<xsd:documentation>A code representing the reason why the feasibility of the service specs is or is not possible at the given location.</xsd:documentation>
+				</xsd:annotation>
+			</xsd:element>
+			<xsd:element
+				name="Extension"
+				type="extvbo:ExtendedServiceFeasibilityLineItemReasonType"
+				minOccurs="0" />
+		</xsd:sequence>
+		<xsd:attribute
+			name="actionCode"
+			type="cmn:ActionCodeType"
+			use="optional">
+			<xsd:annotation>
+				<xsd:documentation>The @actionCode attribute is used within a modification operation to indicate the action (add, update, delete) intended on a component.</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+
+
+	<xsd:complexType name="ServiceFeasibilityLineItemSpecificationType">
+		<xsd:annotation>
+			<xsd:documentation>A component used to store characteristics of the Service Feasibility LineItem. Relates to the Feasibility Detail Spec in the Information Model.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:SpecificationType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceFeasibilityLineItemSpecificationType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceSpecType">
+		<xsd:annotation>
+			<xsd:documentation></xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:BaseComponentType">
+				<xsd:sequence>
+					<xsd:element
+						name="Specification"
+						type="tns:ServiceSpecSpecificationType"
+						minOccurs="0">
+						<xsd:annotation>
+							<xsd:documentation></xsd:documentation>
+						</xsd:annotation>
+					</xsd:element>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceSpecType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+
+	<xsd:complexType name="ServiceSpecSpecificationType">
+		<xsd:annotation>
+			<xsd:documentation>A component used to store characteristics of the Service Spec. Relates to the Service Spec Characteristics in the Information Model.</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexContent>
+			<xsd:extension base="cmn:SpecificationType">
+				<xsd:sequence>
+					<xsd:element
+						name="Extension"
+						type="extvbo:ExtendedServiceSpecSpecificationType"
+						minOccurs="0" />
+				</xsd:sequence>
+			</xsd:extension>
+		</xsd:complexContent>
+	</xsd:complexType>
+</xsd:schema>

@@ -1,0 +1,17 @@
+{
+  "lineItem": [
+    {
+      "type": "Fixed",
+      "specification": [
+        {
+          "type": "ALL"
+        }
+      ]
+    }
+  ],
+  "location":
+  {
+    "premisesId": "P100000035"
+  },
+  "status": "CheckServiceability"
+}

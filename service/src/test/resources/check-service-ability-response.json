@@ -1,0 +1,25 @@
+{
+  "lineItem": [
+    {
+      "specification": {
+        "serviceProvider": "SIRO"
+      },
+      "serviceSpecification": [
+        {
+          "name": "FTTH",
+          "maxUploadSpeed": "100",
+          "maxDownloadSpeed": "1000",
+          "isHighestPriority": true,
+          "canShowTVOffers": true,
+          "serviceCode": [
+            "LightPulse 500 Plus",
+            "LightStream 150",
+            "LightStream 150 Plus",
+            "LightStream 600 Plus TV"
+          ]
+        }
+      ],
+      "status": "Success"
+    }
+  ]
+}
