@@ -41,6 +41,8 @@ public class Constants {
     public static class CheckServiceFeasibilityRequest {
         public static final String PREMISES_ID = "PremisesId";
         public static final String ARD_KEY = "ARD_KEY";
+        public static final String NBI_EIRCODE = "NBI_EIRCODE";
+        public static final String ADDRESS_ID = "addressId";
         public static final String UAN = "UAN";
         public static final String PRODUCT_ORDER_ID = "ProductOrderID";
         public static final String BASKET_ID = "BasketID";
@@ -79,6 +81,7 @@ public class Constants {
         public static final String ORDER_ID = "orderId";
         public static final String VALID = "valid";
         public static final String ELIGIBILITY_STATUS = "EligibilityStatus";
+        public static final String INELIGIBILITY_DESCRIPTION = "IneligibilityDescription";
     }
 
     public static class ServiceSpecificationResponse {

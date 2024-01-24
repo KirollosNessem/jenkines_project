@@ -99,13 +99,17 @@ public class WSUtils {
         return characteristic.getValue() != null && StringUtils.isNotBlank(characteristic.getValue().getValue()) ? characteristic.getValue().getValue() : null;
     }
 
-    public static CharacteristicsType.CharacteristicsValue createCharacteristic(String value, String name) {
+    public static CharacteristicsType.CharacteristicsValue createCharacteristic(String value,String languageId, String name) {
         if (StringUtils.isBlank(value)) {
             return null;
         }
         CharacteristicsType.CharacteristicsValue characteristicsValueType = new CharacteristicsType.CharacteristicsValue();
         characteristicsValueType.setCharacteristicName(name);
-        characteristicsValueType.setValue(WSUtils.createTextType(value));
+        TextType textType = WSUtils.createTextType(value);
+        if(StringUtils.isNotBlank(languageId)){
+            textType.setLanguageID(languageId);
+        }
+        characteristicsValueType.setValue(textType);
         return characteristicsValueType;
     }
 
@@ -177,9 +181,9 @@ public class WSUtils {
         return latitudeMeasure != null && latitudeMeasure.getValue() != null ? latitudeMeasure.getValue() : null;
     }
 
-    public static void addCharacteristic(List<CharacteristicsType.CharacteristicsValue> characteristicsValues, String value, String name) {
+    public static void addCharacteristic(List<CharacteristicsType.CharacteristicsValue> characteristicsValues, String value, String languageId, String name) {
         if (StringUtils.isNotBlank(value)) {
-            characteristicsValues.add(WSUtils.createCharacteristic(value, name));
+            characteristicsValues.add(WSUtils.createCharacteristic(value, languageId,name));
         }
     }
 
