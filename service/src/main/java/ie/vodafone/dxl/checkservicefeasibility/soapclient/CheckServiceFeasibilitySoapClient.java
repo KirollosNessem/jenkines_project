@@ -191,6 +191,8 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
                 future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.ENUMERATION_ERROR));
             } else if (errorMessage.contains(Constants.ErrorMessages.MISSING_OR_INVALID_VALUE) || errorMessage.contains(Constants.ErrorMessages.INVALID_REQUEST)) {
                 future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.MISSING_OR_INVALID_VALUE));
+            } else if (errorMessage.contains(Constants.ErrorMessages.SERVICE_PROVIDER_NOT_FOUND)) {
+                future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.SERVICE_PROVIDER_NOT_FOUND));
             } else {
                 future.completeExceptionally(buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage(), GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
             }
