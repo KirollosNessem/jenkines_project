@@ -9,6 +9,7 @@ public class Location {
     private String ardkey;
     private String vmLocationId;
     private String nbiEircode;
+    private String addressId;
 
     public boolean isEmpty() {
         return StringUtils.isBlank(premisesId)

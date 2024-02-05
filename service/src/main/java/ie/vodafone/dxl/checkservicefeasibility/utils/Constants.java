@@ -28,6 +28,7 @@ public class Constants {
         public static final String UNEXPECTED_ERROR = "Unexpected error at 'ProductGetAvailable_v2'";
         public static final String PREMISSES_NOT_FOUND = "Premises not found";
         public static final String ENUMERATION_ERROR = "not facet-valid with respect to enumeration";
+        public static final String SERVICE_PROVIDER_NOT_FOUND = "serviceProvider}' is expected";
 
     }
 
@@ -41,6 +42,8 @@ public class Constants {
     public static class CheckServiceFeasibilityRequest {
         public static final String PREMISES_ID = "PremisesId";
         public static final String ARD_KEY = "ARD_KEY";
+        public static final String NBI_EIRCODE = "NBI_EIRCODE";
+        public static final String ADDRESS_ID = "addressId";
         public static final String UAN = "UAN";
         public static final String PRODUCT_ORDER_ID = "ProductOrderID";
         public static final String BASKET_ID = "BasketID";
@@ -79,6 +82,7 @@ public class Constants {
         public static final String ORDER_ID = "orderId";
         public static final String VALID = "valid";
         public static final String ELIGIBILITY_STATUS = "EligibilityStatus";
+        public static final String INELIGIBILITY_DESCRIPTION = "IneligibilityDescription";
     }
 
     public static class ServiceSpecificationResponse {

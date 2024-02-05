@@ -1,6 +1,7 @@
 package ie.vodafone.dxl.checkservicefeasibility.mappers;
 
 import com.vodafone.group.schema.common.v1.BaseComponentType;
+import com.vodafone.group.schema.common.v1.CharacteristicsType;
 import com.vodafone.group.schema.common.v1.InfoComponentType;
 import com.vodafone.group.schema.common.v1.PostalAddressWithLocationType;
 import com.vodafone.group.schema.common.v1.SpecificationType;
@@ -45,7 +46,7 @@ public class CheckServiceFeasibilityMapper {
         }
         mapRolesIDs(serviceFeasibilityVBO, request);
         mapSalesQuoteIDs(request, parts);
-        mapLocationIDs(request, parts);
+        mapLocation(request, parts);
         mapLineItemRequest(request.getLineItem(), parts);
         serviceFeasibilityVBO.setParts(parts);
         serviceFeasibilityRequest.setServiceFeasibilityVBO(serviceFeasibilityVBO);
@@ -147,6 +148,9 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.ServiceSpecificationResponse.RESERVED.equalsIgnoreCase(WSUtils.getValueFromTextType(serviceSpecType.getName()))) {
                 mappedServiceSpecification.setReserved(WSUtils.getValueFromTextType(serviceSpecType.getName()));
             }
+            if(serviceSpecType.getDesc() != null){
+                mappedServiceSpecification.setDesc(WSUtils.getValueFromTextType(serviceSpecType.getDesc()));
+            }
             if (serviceSpecType.getType() != null) {
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
@@ -156,6 +160,7 @@ public class CheckServiceFeasibilityMapper {
                     mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
                 }
             }
+            mappedServiceSpecificationList.add(mappedServiceSpecification);
         }
         lineItemResponse.setServiceSpecification(mappedServiceSpecificationList);
     }
@@ -238,6 +243,8 @@ public class CheckServiceFeasibilityMapper {
                 response.setActionFlag(category.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ELIGIBILITY_STATUS.equalsIgnoreCase(category.getName())) {
                 response.setEligibilityStatus(category.getValue());
+            } else if (Constants.CheckServiceFeasibilityResponse.INELIGIBILITY_DESCRIPTION.equalsIgnoreCase(category.getName())) {
+                response.setIneligibilityDescription(category.getValue());
             }
         }
     }
@@ -252,7 +259,7 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.CheckServiceFeasibilityResponse.EIRCODE.equalsIgnoreCase(value.getSchemeName())) {
                 response.setEirCode(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ADDRESS_ID.equalsIgnoreCase(value.getSchemeName())) {
-                response.setEirCode(value.getValue());
+                response.setAddressId(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ORDER_ID.equalsIgnoreCase(value.getSchemeName())) {
                 response.setOrderId(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.VALID.equalsIgnoreCase(value.getSchemeName())) {
@@ -356,7 +363,7 @@ public class CheckServiceFeasibilityMapper {
         serviceFeasibilityLineItemType.setSpecification(specificationType);
     }
 
-    private static void mapLocationIDs(CheckServiceFeasibilityRequest request, ServiceFeasibilityPartsType parts) {
+    private static void mapLocation(CheckServiceFeasibilityRequest request, ServiceFeasibilityPartsType parts) {
         if (request.getLocation() == null) {
             return;
         }
@@ -365,7 +372,15 @@ public class CheckServiceFeasibilityMapper {
         WSUtils.addIdIfExists(locationIDs, request.getLocation().getPremisesId(), Constants.CheckServiceFeasibilityRequest.PREMISES_ID);
         WSUtils.addIdIfExists(locationIDs, request.getLocation().getArdkey(), Constants.CheckServiceFeasibilityRequest.ARD_KEY);
         WSUtils.addIdIfExists(locationIDs, request.getLocation().getVmLocationId(), Constants.CheckServiceFeasibilityRequest.VM_LOCATION_ID);
+        WSUtils.addIdIfExists(locationIDs, request.getLocation().getNbiEircode(), Constants.CheckServiceFeasibilityRequest.NBI_EIRCODE);
         location.setIDs(locationIDs);
+
+        if(StringUtils.isNotBlank(request.getLocation().getAddressId())) {
+            CharacteristicsType characteristicsType = new CharacteristicsType();
+            WSUtils.addCharacteristic(characteristicsType.getCharacteristicsValue(), request.getLocation().getAddressId(), Constants.CheckServiceFeasibilityRequest.ADDRESS_ID, null);
+            location.setCharacteristics(characteristicsType);
+        }
+
         parts.setLocation(location);
     }
 
