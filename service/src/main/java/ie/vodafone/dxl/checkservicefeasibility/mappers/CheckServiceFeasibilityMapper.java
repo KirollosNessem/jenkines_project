@@ -148,6 +148,9 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.ServiceSpecificationResponse.RESERVED.equalsIgnoreCase(WSUtils.getValueFromTextType(serviceSpecType.getName()))) {
                 mappedServiceSpecification.setReserved(WSUtils.getValueFromTextType(serviceSpecType.getName()));
             }
+            if(serviceSpecType.getDesc() != null){
+                mappedServiceSpecification.setDesc(WSUtils.getValueFromTextType(serviceSpecType.getDesc()));
+            }
             if (serviceSpecType.getType() != null) {
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
@@ -157,6 +160,7 @@ public class CheckServiceFeasibilityMapper {
                     mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
                 }
             }
+            mappedServiceSpecificationList.add(mappedServiceSpecification);
         }
         lineItemResponse.setServiceSpecification(mappedServiceSpecificationList);
     }
@@ -255,7 +259,7 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.CheckServiceFeasibilityResponse.EIRCODE.equalsIgnoreCase(value.getSchemeName())) {
                 response.setEirCode(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ADDRESS_ID.equalsIgnoreCase(value.getSchemeName())) {
-                response.setEirCode(value.getValue());
+                response.setAddressId(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.ORDER_ID.equalsIgnoreCase(value.getSchemeName())) {
                 response.setOrderId(value.getValue());
             } else if (Constants.CheckServiceFeasibilityResponse.VALID.equalsIgnoreCase(value.getSchemeName())) {

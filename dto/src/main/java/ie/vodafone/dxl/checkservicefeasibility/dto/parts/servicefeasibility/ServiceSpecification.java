@@ -21,4 +21,5 @@ public class ServiceSpecification implements Serializable {
     private String lineId;
     private String installationType;
     private SubSpecification specification;
+    private String desc;
 }
