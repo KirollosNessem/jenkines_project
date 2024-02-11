@@ -155,11 +155,11 @@ public class CheckServiceFeasibilityMapper {
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
                 }
-                mapServiceSpecifications(serviceSpecType, mappedServiceSpecification);
                 if (serviceSpecType.getIDs() != null) {
                     mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
                 }
             }
+            mapServiceSpecifications(serviceSpecType, mappedServiceSpecification);
             mappedServiceSpecificationList.add(mappedServiceSpecification);
         }
         lineItemResponse.setServiceSpecification(mappedServiceSpecificationList);
@@ -206,6 +206,10 @@ public class CheckServiceFeasibilityMapper {
                 specification.setInstallationType(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.ServiceSpecificationResponse.TAG.equalsIgnoreCase(value.getCharacteristicName())) {
                 specification.setTag(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.ServiceSpecificationResponse.CSID.equalsIgnoreCase(value.getCharacteristicName())) {
+                specification.setCsid(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.ServiceSpecificationResponse.LINE_ID.equalsIgnoreCase(value.getCharacteristicName())) {
+                specification.setLineId(WSUtils.getValueFromTextType(value.getValue()));
             }
         }
     }
