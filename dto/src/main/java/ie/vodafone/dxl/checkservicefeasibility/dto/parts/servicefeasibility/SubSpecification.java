@@ -19,4 +19,6 @@ public class SubSpecification implements Serializable {
     private String ontType;
     private String installationType;
     private String tag;
+    private String csid;
+    private String lineId;
 }

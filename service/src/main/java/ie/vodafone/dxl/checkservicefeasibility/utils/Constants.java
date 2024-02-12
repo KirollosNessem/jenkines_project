@@ -90,6 +90,7 @@ public class Constants {
         public static final String AVAILABLE = "available";
         public static final String SERVICE = "service";
         public static final String ONT_TYPE = "ontType";
+        public static final String CSID = "csid";
         public static final String ONT_ACTIVE = "ontActive";
         public static final String RESERVED = "reserved";
         public static final String INSTALLATION_TYPE = "installationType";
