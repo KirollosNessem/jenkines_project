@@ -394,7 +394,7 @@ public class CheckServiceFeasibilityMapper {
             return;
         }
         InfoComponentType.IDs ids = new InfoComponentType.IDs();
-        WSUtils.addIdIfExists(ids, request.getTransferReservation(), Constants.CheckServiceFeasibilityRequest.TRANSFER_Reservation);
+        WSUtils.addIdIfExists(ids, request.getTransferReservation(), Constants.CheckServiceFeasibilityRequest.TRANSFER_RESERVATION);
         WSUtils.addIdIfExists(ids, request.getLineId(), Constants.CheckServiceFeasibilityRequest.LINE_ID);
         serviceFeasibilityVBO.setIDs(ids);
     }
