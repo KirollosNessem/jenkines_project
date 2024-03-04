@@ -18,6 +18,8 @@ public class CheckServiceFeasibilityRequest {
     private String basketId;
     private String orderNumber;
     private Location location;
+    private String transferReservation;
+    private String lineId;
 
 
     public boolean isEmpty() {

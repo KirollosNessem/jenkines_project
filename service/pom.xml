@@ -5,7 +5,7 @@
     <parent>
         <groupId>ie.vodafone.dxl</groupId>
         <artifactId>csm-check-service-feasibility-ts</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -15,7 +15,7 @@
     <properties>
         <com.vodafone.quarkus-commons.version>2.6.8-RELEASE</com.vodafone.quarkus-commons.version>
         <ie.vodafone.dxl.util.soap.version>1.0.2</ie.vodafone.dxl.util.soap.version>
-        <ie.vodafone.dxl.checkservicefeasibility.dto.version>1.0.0</ie.vodafone.dxl.checkservicefeasibility.dto.version>
+        <ie.vodafone.dxl.checkservicefeasibility.dto.version>1.0.0-SNAPSHOT</ie.vodafone.dxl.checkservicefeasibility.dto.version>
         <ie.vodafone.dxl.util.cache.version>1.0.2</ie.vodafone.dxl.util.cache.version>
         <ie.vodafone.dxl.util.exceptions.version>1.0.10</ie.vodafone.dxl.util.exceptions.version>
         <io.quarkus.version>2.15.0.Final</io.quarkus.version>

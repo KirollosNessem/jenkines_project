@@ -54,6 +54,8 @@ public class Constants {
         public static final String ASSIGNED_PRODUCT_ID = "assignedProductID";
         public static final String VM_LOCATION_ID = "VM_locationID";
         public static final String TRANSFER_REQUEST = "transferRequest";
+        public static final String LINE_ID = "lineID";
+        public static final String TRANSFER_RESERVATION = "transferReservation";
     }
 
     public static class QueryAncillaryServicesRequest {
