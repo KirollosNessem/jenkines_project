@@ -29,7 +29,7 @@ public class Constants {
         public static final String PREMISSES_NOT_FOUND = "Premises not found";
         public static final String ENUMERATION_ERROR = "not facet-valid with respect to enumeration";
         public static final String SERVICE_PROVIDER_NOT_FOUND = "serviceProvider}' is expected";
-        public static final String VM_FAILURE = "Failure vm:CheckServiceFaultREST";
+        public static final String VM_FAILURE = "vm:CheckServiceFaultREST";
 
     }
 
