@@ -13,7 +13,8 @@ public enum ErrorMessageEnum {
     UNEXPECTED_ERROR("CSF108", "Unexpected error at 'ProductGetAvailable_v2'"),
     PREMISSES_NOT_FOUND("CSF109", "Premises not found"),
     ENUMERATION_ERROR("CSF110", "Enumeration validation failed"),
-    SERVICE_PROVIDER_NOT_FOUND("CSF111", "ServiceProvider is required");
+    SERVICE_PROVIDER_NOT_FOUND("CSF111", "ServiceProvider is required"),
+    VM_FAILURE("CSF112", "Missing or Invalid VM value");
 
     private String errorCode;
     private String message;
