@@ -152,8 +152,6 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.PREMISSES_NOT_FOUND));
         } else if (exceptionMessage.contains(Constants.ErrorMessages.REQUEST_FAILED_VALIDATION) && exceptionMessage.contains(Constants.ErrorMessages.NBI)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_NBI_VALUE));
-        } else if (exceptionMessage.contains(Constants.ErrorMessages.VM_FAILURE)) {
-            future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.VM_FAILURE));
         }
         future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exceptionMessage, ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
     }
