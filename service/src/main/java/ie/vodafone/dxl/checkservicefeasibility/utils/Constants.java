@@ -29,6 +29,7 @@ public class Constants {
         public static final String PREMISSES_NOT_FOUND = "Premises not found";
         public static final String ENUMERATION_ERROR = "not facet-valid with respect to enumeration";
         public static final String SERVICE_PROVIDER_NOT_FOUND = "serviceProvider}' is expected";
+        public static final String VM_FAILURE = "vm:CheckServiceFaultREST";
 
     }
 
@@ -54,6 +55,8 @@ public class Constants {
         public static final String ASSIGNED_PRODUCT_ID = "assignedProductID";
         public static final String VM_LOCATION_ID = "VM_locationID";
         public static final String TRANSFER_REQUEST = "transferRequest";
+        public static final String LINE_ID = "lineID";
+        public static final String TRANSFER_RESERVATION = "transferReservation";
     }
 
     public static class QueryAncillaryServicesRequest {

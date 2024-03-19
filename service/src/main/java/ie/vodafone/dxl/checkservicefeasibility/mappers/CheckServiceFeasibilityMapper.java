@@ -44,6 +44,7 @@ public class CheckServiceFeasibilityMapper {
         if (StringUtils.isNotBlank(request.getStatus())) {
             serviceFeasibilityVBO.setStatus(WSUtils.createCodeType(request.getStatus()));
         }
+        mapIDs(serviceFeasibilityVBO, request);
         mapRolesIDs(serviceFeasibilityVBO, request);
         mapSalesQuoteIDs(request, parts);
         mapLocation(request, parts);
@@ -388,7 +389,17 @@ public class CheckServiceFeasibilityMapper {
         parts.setLocation(location);
     }
 
-    private static void mapRolesIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest request) {
+    private static void mapIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest request) {
+        if (StringUtils.isBlank(request.getTransferReservation()) && StringUtils.isBlank(request.getLineId())) {
+            return;
+        }
+        InfoComponentType.IDs ids = new InfoComponentType.IDs();
+        WSUtils.addIdIfExists(ids, request.getTransferReservation(), Constants.CheckServiceFeasibilityRequest.TRANSFER_RESERVATION);
+        WSUtils.addIdIfExists(ids, request.getLineId(), Constants.CheckServiceFeasibilityRequest.LINE_ID);
+        serviceFeasibilityVBO.setIDs(ids);
+    }
+
+        private static void mapRolesIDs(ServiceFeasibilityVBOType serviceFeasibilityVBO, CheckServiceFeasibilityRequest request) {
         if (StringUtils.isBlank(request.getUan())) {
             return;
         }
