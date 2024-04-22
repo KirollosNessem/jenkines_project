@@ -17,6 +17,8 @@ public class ServiceSpecification implements Serializable {
     private String available;
     private String service;
     private String ontActive;
+    private String connectionStandard;
+    private String name;
     private String reserved;
     private String lineId;
     private String installationType;
