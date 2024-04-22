@@ -99,6 +99,7 @@ public class Constants {
         public static final String INSTALLATION_TYPE = "installationType";
         public static final String TAG = "tag";
         public static final String LINE_ID = "lineId";
+        public static final String CONNECTION_STANDARD = "connectionStandard";
     }
 
     public static class CheckServiceFeasibilityResponseCategories {
