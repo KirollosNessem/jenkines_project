@@ -156,9 +156,12 @@ public class CheckServiceFeasibilityMapper {
                 if (Constants.ServiceSpecificationsResponse.AS_DETAILS.equalsIgnoreCase(serviceSpecType.getType().getValue())) {
                     mappedServiceSpecification.setAsDetails(serviceSpecType.getType().getValue());
                 }
-                if (serviceSpecType.getIDs() != null) {
-                    mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
-                }
+            }
+            if (serviceSpecType.getIDs() != null) {
+                mapServiceSpecificationIDs(mappedServiceSpecification, serviceSpecType.getIDs().getID());
+            }
+            if (serviceSpecType.getName() != null) {
+                mappedServiceSpecification.setName(serviceSpecType.getName().getValue());
             }
             mapServiceSpecifications(serviceSpecType, mappedServiceSpecification);
             mappedServiceSpecificationList.add(mappedServiceSpecification);
@@ -187,9 +190,11 @@ public class CheckServiceFeasibilityMapper {
             } else if (Constants.ServiceSpecificationResponse.ONT_ACTIVE.equalsIgnoreCase(idType.getSchemeName())) {
                 mappedServiceSpecification.setOntActive(idType.getValue());
             } else if (Constants.ServiceSpecificationResponse.LINE_ID.equalsIgnoreCase(idType.getSchemeName())) {
-                mappedServiceSpecification.setOntActive(idType.getValue());
+                mappedServiceSpecification.setLineId(idType.getValue());
             } else if (Constants.ServiceSpecificationResponse.INSTALLATION_TYPE.equalsIgnoreCase(idType.getSchemeName())) {
-                mappedServiceSpecification.setOntActive(idType.getValue());
+                mappedServiceSpecification.setInstallationType(idType.getValue());
+            } else if (Constants.ServiceSpecificationResponse.CONNECTION_STANDARD.equalsIgnoreCase(idType.getSchemeName())) {
+                mappedServiceSpecification.setConnectionStandard(idType.getValue());
             }
         }
     }
