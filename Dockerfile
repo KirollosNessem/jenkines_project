@@ -1,20 +1,21 @@
 FROM 728642754198.dkr.ecr.eu-central-1.amazonaws.com/dxl-ie:ga-open-11-jre-quarkus-1.0.0-a
 
 RUN mkdir /deployments
+ENV KEYSTORE_PATH /deployments/ssl/keystore.jks
 
 WORKDIR /deployments
 
 
 RUN groupadd -r vfuser && useradd -r -s /bin/false -g vfuser vfuser
 
-COPY target/quarkus-app/lib/ /deployments/lib/
-COPY target/quarkus-app/*.jar /deployments/
-COPY target/quarkus-app/app/ /deployments/app/
-COPY target/quarkus-app/quarkus/ /deployments/quarkus/
+COPY service/target/quarkus-app/lib/ /deployments/lib/
+COPY service/target/quarkus-app/*.jar /deployments/
+COPY service/target/quarkus-app/app/ /deployments/app/
+COPY service/target/quarkus-app/quarkus/ /deployments/quarkus/
 
 RUN chown -R vfuser:vfuser /deployments
 USER vfuser
 
 EXPOSE 8080
 
-ENTRYPOINT exec java $JAVA_OPTS -jar ./quarkus-run.jar -Dquarkus.http.host=0.0.0.0
+ENTRYPOINT exec java $JAVA_OPTS -Djavax.net.ssl.keyStore=${KEYSTORE_PATH} -Djavax.net.ssl.keyStorePassword=${keystorePass} -jar ./quarkus-run.jar -Dquarkus.http.host=0.0.0.0

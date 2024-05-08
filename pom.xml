@@ -1,242 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>ie.vodafone.dxl</groupId>
-    <artifactId>ARTIFACT_ID</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-    <name>MICROSERVICE_NAME</name>
-    <description>MICROSERVICE_DESCRIPTION</description>
+    <artifactId>csm-check-service-feasibility-ts</artifactId>
+    <version>1.0.2</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dto</module>
+        <module>service</module>
+    </modules>
 
-  <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <commons.version>2.6.8-RELEASE</commons.version>
-    <surefire-plugin.version>2.22.1</surefire-plugin.version>
-    <quarkus.version>2.15.0.Final</quarkus.version>
-    <mapstruct.version>1.5.3.Final</mapstruct.version>
-    <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
-    <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-    <sonar.language>java</sonar.language>
+    <distributionManagement>
+        <repository>
+            <id>myvdfie-releases</id>
+            <name>Releases</name>
+            <url>https://nexus-ui.dxl-prod.aws.cps.vodafone.com/repository/myvdfie-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>myvdfie-snapshots</id>
+            <name>Snapshot</name>
+            <url>https://nexus-ui.dxl-prod.aws.cps.vodafone.com/repository/myvdfie-snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 
-    <session.utils.version>1.0.9</session.utils.version>
-    <ie.dxl.common.utils>1.0.9</ie.dxl.common.utils>
-    <ie.dxl.rest.util.version>1.0.5</ie.dxl.rest.util.version>
-    <sonar.coverage.exclusions>
-      **/config/**,
-      **/model/**,
-      **/resources/**,
-      **/utils/Constants.class
-      **/onelogin/enumeration/**
-      **/mapper/CheckAuthCredentialMapperImpl.class
-      **/mapper/CustomerPartyImpl.class
-      **/mapper/CustomerSystemUserAccountMapperImpl.class
-      **/test/**
-    </sonar.coverage.exclusions>
-  </properties>
+    <properties>
+        <jackson-databind.version>2.14.0</jackson-databind.version>
+        <gson.version>2.8.9</gson.version>
+        <com.googlecode.aviator.version>5.3.3</com.googlecode.aviator.version>
+        <com.hazelcast.version>5.2.5</com.hazelcast.version>
+        <ie.vodafone.dxl.util.common.version>1.0.9</ie.vodafone.dxl.util.common.version>
+    </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>com.vodafone</groupId>
-        <artifactId>quarkus-commons-bom</artifactId>
-        <version>${commons.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <dependencies>
-
-    <!--QUARKUS COMMONS-->
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-core-quarkus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-security-quarkus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-rest-quarkus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-error-quarkus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-testing-quarkus</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.vodafone</groupId>
-      <artifactId>common-logging-quarkus</artifactId>
-    </dependency>
-
-
-    <!--QUARKUS-->
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-health</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-smallrye-openapi</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-jackson</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-resteasy-mutiny</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-hibernate-validator</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-    <!--SWAGGER-->
-    <dependency>
-      <groupId>io.swagger</groupId>
-      <artifactId>swagger-annotations</artifactId>
-      <version>${io.swagger}</version>
-    </dependency>
-
-
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-core</artifactId>
-      <version>4.9.0</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mockito</groupId>
-      <artifactId>mockito-junit-jupiter</artifactId>
-      <version>4.9.0</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.quarkus</groupId>
-      <artifactId>quarkus-junit5-mockito</artifactId>
-      <scope>test</scope>
-    </dependency>
-
-
-
-    <!--dependencies for CSM DTOs-->
-
-
-    <dependency>
-      <groupId>ie.vodafone.dxl</groupId>
-      <artifactId>dxl-utils-session</artifactId>
-      <version>${session.utils.version}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ie.vodafone.dxl</groupId>
-      <artifactId>dxl-utils-common</artifactId>
-      <version>${ie.dxl.common.utils}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>ie.vodafone.dxl</groupId>
-      <artifactId>dxl-utils-rest</artifactId>
-      <version>${ie.dxl.rest.util.version}</version>
-    </dependency>
-
-
-
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>org.mapstruct</groupId>
-      <artifactId>mapstruct-processor</artifactId>
-      <version>${mapstruct.version}</version>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>io.quarkus</groupId>
-        <artifactId>quarkus-maven-plugin</artifactId>
-        <version>${quarkus.version}</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-          <annotationProcessorPaths>
-            <path>
-              <groupId>org.mapstruct</groupId>
-              <artifactId>mapstruct-processor</artifactId>
-              <version>${mapstruct.version}</version>
-            </path>
-          </annotationProcessorPaths>
-        </configuration>
-      </plugin>
-      <plugin>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${surefire-plugin.version}</version>
-        <configuration>
-          <systemProperties>
-            <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-          </systemProperties>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.jacoco</groupId>
-        <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.6</version>
-        <configuration>
-          <skip>${maven.test.skip}</skip>
-          <destFile>${basedir}/target/coverage-reports/jacoco-unit.xml</destFile>
-          <dataFile>${basedir}/target/coverage-reports/jacoco-unit.xml</dataFile>
-          <output>file</output>
-          <append>true</append>
-          <excludes>
-            <exclude>*MethodAccess</exclude>
-          </excludes>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>prepare-agent</goal>
-            </goals>
-          </execution>
-          <execution>
-            <id>report</id>
-            <phase>prepare-package</phase>
-            <goals>
-              <goal>report</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${jackson-databind.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.aviator</groupId>
+                <artifactId>aviator</artifactId>
+                <version>${com.googlecode.aviator.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.hazelcast</groupId>
+                <artifactId>hazelcast</artifactId>
+                <version>${com.hazelcast.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

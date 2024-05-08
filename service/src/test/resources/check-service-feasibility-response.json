@@ -1,0 +1,12 @@
+{
+  "systemsToCall": "EligibilityCheck",
+  "lineItem": [
+    {
+      "status": "OK",
+      "eligibilityStatus": "Passed"
+    }
+  ],
+  "indicator": true,
+  "eligibilityCheck": "SIRO",
+  "name": "OK"
+}
