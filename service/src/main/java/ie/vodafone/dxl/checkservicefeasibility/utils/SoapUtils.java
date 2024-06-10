@@ -79,7 +79,7 @@ public class SoapUtils {
                     nodeFailures = null;
                 }
             } else if (nodeFailures.getNextSibling() != null) {
-                nodeFailures.getNextSibling();
+                nodeFailures = nodeFailures.getNextSibling();
             } else {
                 nodeFailures = null;
             }
