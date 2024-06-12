@@ -119,7 +119,7 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
                 CheckServiceFeasibilityOsbResponse osbResponse = new CheckServiceFeasibilityOsbResponse(responseType, resultStatus);
                 future.complete(osbResponse);
             } catch (DXLException e) {
-                logger.error("OSB Failure - Failed to call getSubscription soap operation");
+                logger.error("OSB Failure - Failed to call checkServiceFeasibility soap operation");
                 handleResultStatusErrors(future, e);
             } catch (InterruptedException | ExecutionException e) {
                 if (e.getMessage().contains(EMPTY_SOAP_BODY_IN_RESPONSE)) {
