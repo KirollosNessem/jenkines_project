@@ -153,7 +153,7 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
         } else if (exceptionMessage.contains(Constants.ErrorMessages.REQUEST_FAILED_VALIDATION) && exceptionMessage.contains(Constants.ErrorMessages.NBI)) {
             future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.INVALID_NBI_VALUE));
         }
-        future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, exceptionMessage, ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
+        future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, BUSINESS_CATEGORY_SOAP_FAULT_CODE, ExceptionConstants.BUSINESS_CATEGORY_SOAP_FAULT_CODE));
     }
 
     private ResultStatus getResultStatus(BindingProvider bindingProvider) throws DXLException {
@@ -196,7 +196,7 @@ public class CheckServiceFeasibilitySoapClient extends ConnectionHandlerImpl<Che
             } else if (errorMessage.contains(Constants.ErrorMessages.VM_FAILURE)) {
                 future.completeExceptionally(buildDxlCsmException(HttpStatus.SC_BAD_REQUEST, ErrorMessageEnum.VM_FAILURE));
             } else {
-                future.completeExceptionally(buildTMFErrorWithCode(HttpStatus.SC_INTERNAL_SERVER_ERROR, e.getMessage(), GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
+                future.completeExceptionally(ie.vodafone.dxl.utils.exceptions.ExceptionUtil.buildDxlCsmException(HttpStatus.SC_INTERNAL_SERVER_ERROR, ExceptionConstants.GENERIC_MESSAGE_ERROR, ExceptionConstants.GENERIC_OSB_ERROR_NO_TECH_OR_BUSINESS));
             }
         }
         return true;

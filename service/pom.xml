@@ -17,7 +17,7 @@
         <ie.vodafone.dxl.util.soap.version>1.0.2</ie.vodafone.dxl.util.soap.version>
         <ie.vodafone.dxl.checkservicefeasibility.dto.version>1.0.3</ie.vodafone.dxl.checkservicefeasibility.dto.version>
         <ie.vodafone.dxl.util.cache.version>1.0.2</ie.vodafone.dxl.util.cache.version>
-        <ie.vodafone.dxl.util.exceptions.version>1.0.10</ie.vodafone.dxl.util.exceptions.version>
+        <ie.vodafone.dxl.util.exceptions.version>1.0.11-SNAPSHOT</ie.vodafone.dxl.util.exceptions.version>
         <io.quarkus.version>2.15.0.Final</io.quarkus.version>
         <io.netty.netty.codec.haproxy.version>4.1.86.Final</io.netty.netty.codec.haproxy.version>
         <maven.compiler.source>11</maven.compiler.source>
