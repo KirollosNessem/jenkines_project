@@ -13,7 +13,7 @@ public class Constants {
         public static final String DATA_REF = "Dataref";
     }
 
-    public static class ErrorMessages {
+    public static class ErrorMessage {
         public static final String MISSING_OR_INVALID_VALUE = "Missing or Invalid Value";
         public static final String INVALID_REQUEST = "request is an invalid usage of the operation";
         public static final String INVALID_PRODUCT_TYPE= "Invalid ProductType parameter.";
