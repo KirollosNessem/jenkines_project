@@ -16,12 +16,12 @@
         <repository>
             <id>myvdfie-releases</id>
             <name>Releases</name>
-            <url>https://nexus-ui.dxl-prod.aws.cps.vodafone.com/repository/myvdfie-releases/</url>
+            <url>https://nexus-ui.tools.prod.dxl.aws.cps.vodafone.com/repository/myvdfie-releases/</url>
         </repository>
         <snapshotRepository>
             <id>myvdfie-snapshots</id>
             <name>Snapshot</name>
-            <url>https://nexus-ui.dxl-prod.aws.cps.vodafone.com/repository/myvdfie-snapshots/</url>
+            <url>https://nexus-ui.tools.prod.dxl.aws.cps.vodafone.com/repository/myvdfie-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
 
