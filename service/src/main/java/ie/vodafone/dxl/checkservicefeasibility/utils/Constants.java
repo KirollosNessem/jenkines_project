@@ -126,6 +126,12 @@ public class Constants {
         public static final String FEASIBILITY_CHECK = "feasibilityCheck";
         public static final String OPEN_ORDER_EXISTS = "openOrderExists";
         public static final String ACTIVE_ASSET_EXISTS = "activeAssetExists";
+        public static final String OPEN_ORDER_OWNER = "openOrderOwner";
+        public static final String ACTIVE_ASSET_OWNER = "activeAssetOwner";
+        public static final String TRANSFER_APPOINTMENT_MANDATORY = "transferAppointmentMandatory";
+        public static final String TERMINATED_ONTAT_LOCATION = "terminatedOntatLocation";
+        public static final String TERMINATED_ONT_STATUS = "terminatedOntStatus";
+        public static final String ACTIVE_ASSET_MATCH = "activeAssetMatch";
 
     }
 

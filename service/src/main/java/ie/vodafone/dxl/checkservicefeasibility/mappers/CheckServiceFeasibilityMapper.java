@@ -309,6 +309,18 @@ public class CheckServiceFeasibilityMapper {
                 specification.setServiceProvider(WSUtils.getValueFromTextType(value.getValue()));
             } else if (Constants.LineItemResponseSpecificationCharacteristic.INSITU_FLAG.equalsIgnoreCase(characteristicName)) {
                 specification.setInsituFlag(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.OPEN_ORDER_OWNER.equalsIgnoreCase(characteristicName)) {
+                specification.setOpenOrderOwner(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.ACTIVE_ASSET_OWNER.equalsIgnoreCase(characteristicName)) {
+                specification.setActiveAssetOwner(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.TRANSFER_APPOINTMENT_MANDATORY.equalsIgnoreCase(characteristicName)) {
+                specification.setTransferAppointmentMandatory(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.TERMINATED_ONTAT_LOCATION.equalsIgnoreCase(characteristicName)) {
+                specification.setTerminatedOntatLocation(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.TERMINATED_ONT_STATUS.equalsIgnoreCase(characteristicName)) {
+                specification.setTerminatedOntStatus(WSUtils.getValueFromTextType(value.getValue()));
+            } else if (Constants.LineItemResponseSpecificationCharacteristic.ACTIVE_ASSET_MATCH.equalsIgnoreCase(characteristicName)) {
+                specification.setActiveAssetMatch(WSUtils.getValueFromTextType(value.getValue()));
             }
         }
     }
