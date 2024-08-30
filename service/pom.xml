@@ -14,7 +14,7 @@
 
     <properties>
         <com.vodafone.quarkus-commons.version>2.6.8-RELEASE</com.vodafone.quarkus-commons.version>
-        <ie.vodafone.dxl.util.soap.version>1.0.2</ie.vodafone.dxl.util.soap.version>
+        <ie.vodafone.dxl.util.soap.version>1.0.6</ie.vodafone.dxl.util.soap.version>
         <ie.vodafone.dxl.checkservicefeasibility.dto.version>1.0.4-SNAPSHOT</ie.vodafone.dxl.checkservicefeasibility.dto.version>
         <ie.vodafone.dxl.util.cache.version>1.0.2</ie.vodafone.dxl.util.cache.version>
         <ie.vodafone.dxl.util.exceptions.version>1.0.11</ie.vodafone.dxl.util.exceptions.version>
@@ -23,7 +23,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <nexus.server.url>https://nexus-ui.dxl-prod.aws.cps.vodafone.com/</nexus.server.url>
-        <org.apache.cxf.version>3.5.5</org.apache.cxf.version>
+        <org.apache.cxf.version>3.5.8</org.apache.cxf.version>
         <org.yaml.snakeyaml.version>2.0</org.yaml.snakeyaml.version>
         <com.fasterxml.woodstox.version>6.4.0</com.fasterxml.woodstox.version>
         <org.mockito.version>3.3.0</org.mockito.version>
