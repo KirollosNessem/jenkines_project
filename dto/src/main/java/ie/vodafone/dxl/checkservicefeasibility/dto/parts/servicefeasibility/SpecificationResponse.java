@@ -22,5 +22,11 @@ public class SpecificationResponse implements Serializable {
     private String broadBandService;
     private String insituFlag;
     private String serviceProvider;
+    private String openOrderOwner;
+    private String activeAssetOwner;
+    private String transferAppointmentMandatory;
+    private String terminatedOntatLocation;
+    private String terminatedOntStatus;
+    private String activeAssetMatch;
 
 }
