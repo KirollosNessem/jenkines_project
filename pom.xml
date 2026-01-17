@@ -91,6 +91,15 @@
             </plugin>
         </plugins>
     </build>
+         <snapshotRepository>
+    <id>my-repositories-snapshot</id>
+    <url>http://192.168.44.148:8081/repository/petclinic-snapshots/</url>
+  </snapshotRepository>
+  <repository>
+    <id>my-repository-release</id>
+    <url>http://192.168.44.148:8081/repository/petclinic-releases/</url>
+  </repository>
+</distributionManagement>
 </project>
 
 
